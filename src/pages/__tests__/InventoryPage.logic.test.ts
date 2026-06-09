@@ -2,7 +2,6 @@ import { beforeEach, describe, it, expect } from 'vitest'
 import { useInventoryStore } from '../../stores/useInventoryStore'
 import { useHarvestStore } from '../../stores/useHarvestStore'
 import { RESOURCES, CRAFT_RECIPES } from '../../data'
-import { canAffordRecipe } from '../../lib/craftHelpers'
 
 // Tests prompt 007 — UI Inventaire
 // Couvre : buildFullResourceList, filtres, tri, InventorySummary, ResourceRow logic
