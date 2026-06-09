@@ -274,7 +274,7 @@ describe('ResourceRow — logique d\'affichage', () => {
 
   it('production/min : actif si camp.regionId === resource.region', () => {
     useHarvestStore.setState({
-      camp: { regionId: 'foret', placedAt: Date.now() },
+      camp: { regionId: 'foret', startedAt: Date.now(), lastTickAt: Date.now() },
       expeditions: [], lastSavedAt: Date.now(),
     })
     const camp = useHarvestStore.getState().camp!
@@ -285,7 +285,7 @@ describe('ResourceRow — logique d\'affichage', () => {
 
   it('production/min : inactif si camp.regionId !== resource.region', () => {
     useHarvestStore.setState({
-      camp: { regionId: 'caverne', placedAt: Date.now() },
+      camp: { regionId: 'caverne', startedAt: Date.now(), lastTickAt: Date.now() },
       expeditions: [], lastSavedAt: Date.now(),
     })
     const camp = useHarvestStore.getState().camp!
