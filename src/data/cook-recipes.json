@@ -1,0 +1,67 @@
+{
+  "cookRecipes": [
+    {
+      "id": "gelee_slime",
+      "name": "Gelée de Slime",
+      "emoji": "🟢",
+      "description": "Un dessert translucide aux reflets irisés. Spécialité des marais.",
+      "tooltip": "Recette signature inspirée de Dungeon Meshi. Surprenante mais délicieuse.",
+      "inspired": "Dungeon Meshi",
+      "productionLine": [
+        { "resourceId": "slime",       "perMin": 30 },
+        { "resourceId": "cristal_sel", "perMin": 10 },
+        { "resourceId": "baie_rouge",  "perMin": 20 }
+      ],
+      "optimalRatio": {
+        "description": "3 slimes / 1 cristal de sel / 2 baies rouges",
+        "ratios": [3, 1, 2]
+      },
+      "cookTimeSeconds": 20,
+      "outputPerBatch": 1,
+      "xpReward": 15,
+      "unlocked": true
+    },
+    {
+      "id": "soupe_champignons",
+      "name": "Soupe aux Champignons des Cavernes",
+      "emoji": "🍲",
+      "description": "Une soupe fumante aux saveurs terreuses profondes.",
+      "tooltip": "Recette emblématique des aventuriers des cavernes. Réconfortante et nourrissante.",
+      "inspired": "Dungeon Meshi",
+      "productionLine": [
+        { "resourceId": "champignon",    "perMin": 30 },
+        { "resourceId": "bouillon_base", "perMin": 10 },
+        { "resourceId": "herbe",         "perMin": 20 }
+      ],
+      "optimalRatio": {
+        "description": "3 champignons / 1 bouillon / 2 herbes",
+        "ratios": [3, 1, 2]
+      },
+      "cookTimeSeconds": 25,
+      "outputPerBatch": 1,
+      "xpReward": 20,
+      "unlocked": false
+    },
+    {
+      "id": "pizza_fantastique",
+      "name": "Pizza Fantastique",
+      "emoji": "🍕",
+      "description": "[PLACEHOLDER] Une pizza aux ingrédients magiques. Recette à affiner.",
+      "tooltip": "Recette placeholder — sera remplacée par une vraie recette heroic fantasy.",
+      "inspired": "placeholder",
+      "productionLine": [
+        { "resourceId": "farine",        "perMin": 30 },
+        { "resourceId": "bouillon_base", "perMin": 90 },
+        { "resourceId": "lait",          "perMin": 60 }
+      ],
+      "optimalRatio": {
+        "description": "1 farine / 3 bouillons / 2 laits",
+        "ratios": [1, 3, 2]
+      },
+      "cookTimeSeconds": 40,
+      "outputPerBatch": 1,
+      "xpReward": 30,
+      "unlocked": false
+    }
+  ]
+}

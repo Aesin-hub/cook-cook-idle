@@ -1,0 +1,49 @@
+{
+  "craftRecipes": [
+    {
+      "id": "bouillon_base",
+      "name": "Bouillon de Base",
+      "emoji": "🍵",
+      "description": "Un bouillon simple mais fondamental.",
+      "tooltip": "La base de presque toutes les soupes. Rapide à préparer.",
+      "inputs": [
+        { "resourceId": "herbe",      "quantity": 2 },
+        { "resourceId": "champignon", "quantity": 1 },
+        { "resourceId": "eau",        "quantity": 3 }
+      ],
+      "output": { "resourceId": "bouillon_base", "quantity": 1 },
+      "craftTimeSeconds": 10,
+      "firstTimeFast": true,
+      "xpReward": 5
+    },
+    {
+      "id": "farine",
+      "name": "Farine",
+      "emoji": "🌾",
+      "description": "De la farine obtenue en broyant du blé.",
+      "tooltip": "Ingrédient de base pour les pâtes et pains. Simple à obtenir.",
+      "inputs": [
+        { "resourceId": "ble", "quantity": 3 },
+        { "resourceId": "eau", "quantity": 1 }
+      ],
+      "output": { "resourceId": "farine", "quantity": 2 },
+      "craftTimeSeconds": 8,
+      "firstTimeFast": true,
+      "xpReward": 4
+    },
+    {
+      "id": "lingot_fer",
+      "name": "Lingot de Fer",
+      "emoji": "🔩",
+      "description": "Un lingot fondu, utile pour les outils.",
+      "tooltip": "Fond le minerai pour obtenir un métal pur. Nécessaire pour débloquer la région Marais.",
+      "inputs": [
+        { "resourceId": "minerai_fer", "quantity": 3 }
+      ],
+      "output": { "resourceId": "lingot_fer", "quantity": 1 },
+      "craftTimeSeconds": 15,
+      "firstTimeFast": true,
+      "xpReward": 8
+    }
+  ]
+}

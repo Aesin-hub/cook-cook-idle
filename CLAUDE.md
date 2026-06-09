@@ -1,0 +1,209 @@
+# Cooking Fantasy — Claude Code Context
+
+## Projet
+Jeu idle / crafting / gestion en heroic fantasy inspiré de Dungeon Meshi.
+Boucle de gameplay en 3 couches : **Récolte → Craft → Cook**.
+Développement solo. Cible : web + mobile (Capacitor).
+
+---
+
+## Stack technique
+| Couche | Technologie |
+|---|---|
+| Front | React + Vite + TypeScript + Tailwind CSS v3 |
+| Composants | shadcn/ui |
+| State | Zustand (avec persist middleware → localStorage) |
+| Backend | Supabase (auth + sauvegarde cloud) |
+| Mobile | Capacitor |
+
+---
+
+## Structure du projet
+```
+src/
+├── data/             ← TOUTES les données du jeu en JSON (ne jamais coder en dur)
+│   ├── resources.json
+│   ├── regions.json
+│   ├── craft-recipes.json
+│   ├── cook-recipes.json
+│   └── index.ts      ← point d'entrée unique pour importer les données
+├── types/            ← types TypeScript
+│   ├── game.ts       ← Resource, Region, CraftRecipe, CookRecipe
+│   ├── harvest.ts    ← Camp, Expedition, HarvestYield
+│   └── craft.ts      ← CraftJob, CraftResult
+├── stores/           ← stores Zustand (persistés localStorage)
+│   ├── useHarvestStore.ts   ← camp, expéditions, tick(), offline progress
+│   ├── useInventoryStore.ts ← resources: Record<string, number>
+│   └── useCraftStore.ts     ← file d'attente craft, XP, craftedOnce
+├── hooks/
+│   ├── useGameLoop.ts       ← tick 1s (harvest + craft), monté une seule fois dans App.tsx
+│   └── useOfflineProgress.ts ← calcul unique au chargement, retourne OfflineProgressDisplay
+├── pages/
+│   ├── HarvestPage.tsx
+│   ├── CraftPage.tsx
+│   └── InventoryPage.tsx
+├── components/
+│   ├── layout/
+│   │   ├── AppShell.tsx     ← wrapper global fond + nav
+│   │   └── BottomNav.tsx    ← navigation 5 onglets fixe en bas
+│   ├── shared/
+│   │   ├── ProgressBar.tsx  ← barre réutilisable avec glow néon
+│   │   ├── Tooltip.tsx      ← hover desktop + tap long mobile
+│   │   ├── ToastManager.tsx ← toasts auto 3s + hook useToast()
+│   │   └── OfflineModal.tsx ← modal retour joueur
+│   ├── harvest/
+│   │   ├── RegionCard.tsx
+│   │   ├── CampPanel.tsx
+│   │   ├── ExpeditionSlot.tsx
+│   │   └── ExpeditionModal.tsx
+│   ├── craft/
+│   │   ├── RecipeCard.tsx
+│   │   ├── IngredientRow.tsx
+│   │   ├── CraftQueueBar.tsx  ← position: fixed, visible sur tous les onglets
+│   │   └── XpBadge.tsx
+│   └── inventory/
+│       ├── InventoryFilters.tsx
+│       ├── ResourceRow.tsx
+│       └── InventorySummary.tsx
+└── lib/
+    ├── utils.ts         ← utilitaires shadcn
+    └── craftHelpers.ts  ← canAffordRecipe, getMissingReason, formatCraftTime
+```
+
+---
+
+## Design system
+
+### Thème
+Fond bleu nuit profond + accents néon vifs. Mobile-first.
+
+### Couleurs (tokens Tailwind disponibles)
+```
+cf-bg       #0d1117   fond principal
+cf-surface  #161b22   cartes / panneaux
+cf-elevated #1c2333   modals / dropdowns
+cf-hover    #21262d   états hover
+
+cf-harvest  #00d2ff   cyan  — tout ce qui concerne la récolte
+cf-craft    #bf5af2   violet — craft / transformation
+cf-cook     #ff9500   orange — cook / cuisine
+cf-success  #30d158   vert  — succès / complétion
+cf-xp       #ffd500   or    — XP / rareté / inventaire
+cf-danger   #ff453a   rouge — erreur / stock insuffisant
+cf-muted    #636e8a   gris  — inactif / labels
+cf-text     #e2e8f0   texte principal
+cf-text-dim #8b949e   texte secondaire
+```
+
+### Règles UI impératives
+- Couleur encode toujours le contexte gameplay (cyan = récolte, violet = craft, orange = cook)
+- Navigation fixe en bas — 5 onglets, tout accessible en 1 clic
+- Zéro scroll sur les écrans principaux (sauf Inventaire qui est une liste)
+- Jamais d'ID technique visible dans l'UI — toujours `emoji + name`
+- Tooltips sur toutes les ressources et recettes (champ `tooltip` des JSON)
+- Progress bars avec box-shadow néon (showGlow)
+
+---
+
+## Règles de développement
+
+### Données
+- **Jamais de données de jeu en dur dans le code** — tout passe par `src/data/`
+- Les ressources de base sont dans `resources.json`
+- Les ressources craftées (bouillon_base, farine, lingot_fer) n'ont pas d'entrée
+  dans `resources.json` — elles sont détectées dynamiquement dans l'inventaire
+
+### Stores Zustand
+- Tous les stores sont persistés via `persist` middleware → localStorage
+- Clés de persistence : `cooking-fantasy-harvest`, `cooking-fantasy-inventory`, `cooking-fantasy-craft`
+- `useGameLoop` est monté **une seule fois** dans `App.tsx` — ne jamais en créer d'autres instances
+
+### Système de récolte
+- **Camp** : 1 seul actif, génère toutes les ressources d'une région à 100% du `baseYieldPerMin`
+- **Expéditions** : max 3 simultanées, ciblent 1 ressource, rendement 60%, durées 15/30/60/120 min
+- **Offline progress** : plafonné à 8h, calculé au chargement dans `useOfflineProgress`
+- Annulation d'expédition : toujours possible, toujours sans pénalité
+
+### Système de craft
+- File d'attente illimitée, un craft à la fois
+- Ingrédients débités au lancement (pas à la fin)
+- `firstTimeFast: true` sur une recette → 3s la première fois seulement
+- `craftedOnce` persisté pour que le bonus 3s ne se redéclenche pas
+- Annulation toujours possible avec remboursement intégral
+
+### Monétisation
+- **Zéro p2w. Zéro microtransaction. Décision ferme et définitive.**
+- Aucun slot premium, aucun token, aucun mur de progression payant
+- `MAX_EXPEDITIONS` (3) augmente uniquement via progression en jeu
+- La file de craft est illimitée — la durée est le coût, pas les slots
+
+---
+
+## Conventions de code
+
+### Nommage
+- Composants : PascalCase (`RegionCard.tsx`)
+- Stores : camelCase avec préfixe `use` (`useHarvestStore.ts`)
+- Types : PascalCase (`HarvestYield`)
+- Constantes de config : SCREAMING_SNAKE_CASE (`OFFLINE_CAP_MS`)
+- IDs des ressources : snake_case (`baie_rouge`, `cristal_sel`)
+
+### Imports data
+```typescript
+// Toujours importer depuis src/data/index.ts
+import { RESOURCES, REGIONS, CRAFT_RECIPES, COOK_RECIPES } from '../data'
+
+// Jamais importer directement les JSON
+// ❌ import resources from '../data/resources.json'
+```
+
+### Stores Zustand entre eux
+```typescript
+// Pour accéder à un autre store depuis un store (ex: useCraftStore → useInventoryStore)
+// Utiliser .getState() — ne jamais utiliser les hooks React dans les stores
+useInventoryStore.getState().addResources([...])
+useInventoryStore.getState().removeResources([...])
+```
+
+### Styles
+- Styles inline pour les valeurs dynamiques et les couleurs spécifiques
+- Classes Tailwind pour les utilitaires standards (`flex`, `items-center`, `gap-2`, etc.)
+- Jamais de fichiers CSS séparés sauf `index.css` pour les `@keyframes` globaux
+- Border-radius standard : `10px` (cards) / `12px` (panneaux) / `16px` (modals) / `20px` (pills/badges)
+
+---
+
+## Tâches et workflow
+
+Les prompts sont dans `tasks/prompts/`.
+Le backlog est dans `tasks/backlog.md`.
+Le sprint actif est dans `tasks/sprint.md`.
+
+Quand un prompt est exécuté :
+1. Mettre à jour `tasks/backlog.md` : passer le prompt de "En cours" à "Fait"
+2. Vider `tasks/sprint.md` ou y mettre le prochain prompt actif
+
+---
+
+## État actuel du projet (à mettre à jour après chaque prompt)
+
+### Prompts exécutés
+- [ ] 001 — Init projet
+- [ ] 002 — Données JSON
+- [ ] 003 — Timers idle
+- [ ] 004 — Craft system
+- [ ] 005 — UI Récolte
+- [ ] 006 — UI Craft
+- [ ] 007 — UI Inventaire
+- [ ] 008 — Sauvegarde Supabase
+
+### Pages disponibles
+- `HarvestPage` — onglet Récolte (camp + expéditions + offline modal)
+- `CraftPage` — onglet Craft (recettes + file + XP)
+- `InventoryPage` — onglet Sac (liste filtrée + tri + summary)
+- Craft / Cook / Carte — placeholders `<ComingSoon>`
+
+### Prochaine étape
+**Prompt 008 — Sauvegarde Supabase**
+Remplace le localStorage par une sauvegarde cloud.
+Nécessite : créer un projet Supabase + ajouter les clés dans `.env.local`

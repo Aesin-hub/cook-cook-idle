@@ -1,0 +1,40 @@
+{
+  "regions": [
+    {
+      "id": "foret",
+      "name": "Forêt des Elfes",
+      "emoji": "🌲",
+      "unlocked": true,
+      "description": "Une forêt dense aux ressources variées.",
+      "tooltip": "Ta région de départ. Herbes, champignons et bois y abondent.",
+      "unlockCondition": null
+    },
+    {
+      "id": "caverne",
+      "name": "Cavernes de Fer",
+      "emoji": "⛰️",
+      "unlocked": false,
+      "description": "Des grottes sombres riches en minerais.",
+      "tooltip": "Débloque cette région pour accéder aux métaux et cristaux de sel.",
+      "unlockCondition": "Craft 10 Bouillons de Base"
+    },
+    {
+      "id": "marais",
+      "name": "Marais des Slimes",
+      "emoji": "🌿",
+      "unlocked": false,
+      "description": "Un marais trouble peuplé de créatures gluantes.",
+      "tooltip": "Région mystérieuse. Les slimes y prospèrent, source d'ingrédients uniques.",
+      "unlockCondition": "Craft 5 Lingots de Fer"
+    },
+    {
+      "id": "plaine",
+      "name": "Plaines Dorées",
+      "emoji": "🌾",
+      "unlocked": false,
+      "description": "De vastes plaines agricoles au soleil.",
+      "tooltip": "Les plaines fournissent blé, lait et miel en abondance.",
+      "unlockCondition": "Cuisiner 1 Soupe aux Champignons"
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "resources": [
+    {
+      "id": "herbe", "name": "Herbe", "emoji": "🌿",
+      "region": "foret", "rarity": "common", "rarityLabel": "Commun",
+      "baseYieldPerMin": 10,
+      "tooltip": "Une herbe aromatique qui pousse partout en forêt. Base de nombreux bouillons."
+    },
+    {
+      "id": "champignon", "name": "Champignon", "emoji": "🍄",
+      "region": "foret", "rarity": "common", "rarityLabel": "Commun",
+      "baseYieldPerMin": 6,
+      "tooltip": "Champignon des sous-bois. Saveur terreuse, idéal en soupe."
+    },
+    {
+      "id": "baie_rouge", "name": "Baie Rouge", "emoji": "🍓",
+      "region": "foret", "rarity": "common", "rarityLabel": "Commun",
+      "baseYieldPerMin": 8,
+      "tooltip": "Petite baie acidulée. Apporte de la couleur et du goût aux desserts."
+    },
+    {
+      "id": "bois", "name": "Bois", "emoji": "🪵",
+      "region": "foret", "rarity": "common", "rarityLabel": "Commun",
+      "baseYieldPerMin": 5,
+      "tooltip": "Bois de chauffe. Nécessaire pour alimenter les fours et braseros."
+    },
+    {
+      "id": "pierre", "name": "Pierre", "emoji": "🪨",
+      "region": "caverne", "rarity": "common", "rarityLabel": "Commun",
+      "baseYieldPerMin": 8,
+      "tooltip": "Pierre brute extraite des cavernes. Utilisée pour construire des équipements."
+    },
+    {
+      "id": "minerai_fer", "name": "Minerai de Fer", "emoji": "⛏️",
+      "region": "caverne", "rarity": "uncommon", "rarityLabel": "Peu commun",
+      "baseYieldPerMin": 3,
+      "tooltip": "Minerai brut à fondre. Donne des lingots utiles pour les outils de cuisine."
+    },
+    {
+      "id": "cristal_sel", "name": "Cristal de Sel", "emoji": "💎",
+      "region": "caverne", "rarity": "uncommon", "rarityLabel": "Peu commun",
+      "baseYieldPerMin": 4,
+      "tooltip": "Sel cristallisé des profondeurs. Exhausteur de goût naturel et conservateur."
+    },
+    {
+      "id": "slime", "name": "Slime", "emoji": "🟢",
+      "region": "marais", "rarity": "common", "rarityLabel": "Commun",
+      "baseYieldPerMin": 7,
+      "tooltip": "Substance gluante récoltée sur les slimes du marais. Épaississant culinaire unique."
+    },
+    {
+      "id": "algue", "name": "Algue", "emoji": "🌱",
+      "region": "marais", "rarity": "common", "rarityLabel": "Commun",
+      "baseYieldPerMin": 9,
+      "tooltip": "Algue de marais riche en minéraux. Goût iodé, parfaite en bouillon."
+    },
+    {
+      "id": "oeuf_grenouille", "name": "Œuf de Grenouille", "emoji": "🥚",
+      "region": "marais", "rarity": "uncommon", "rarityLabel": "Peu commun",
+      "baseYieldPerMin": 3,
+      "tooltip": "Œufs gélatineux de grenouille des marais. Ingrédient rare pour recettes avancées."
+    },
+    {
+      "id": "ble", "name": "Blé", "emoji": "🌾",
+      "region": "plaine", "rarity": "common", "rarityLabel": "Commun",
+      "baseYieldPerMin": 10,
+      "tooltip": "Blé doré des plaines. Base de la farine et de nombreuses pâtes."
+    },
+    {
+      "id": "lait", "name": "Lait", "emoji": "🥛",
+      "region": "plaine", "rarity": "common", "rarityLabel": "Commun",
+      "baseYieldPerMin": 5,
+      "tooltip": "Lait frais des vaches des plaines. Onctueux, indispensable en pâtisserie."
+    },
+    {
+      "id": "miel", "name": "Miel", "emoji": "🍯",
+      "region": "plaine", "rarity": "uncommon", "rarityLabel": "Peu commun",
+      "baseYieldPerMin": 3,
+      "tooltip": "Miel des ruches sauvages. Sucrant naturel aux arômes floraux."
+    },
+    {
+      "id": "eau", "name": "Eau", "emoji": "💧",
+      "region": "plaine", "rarity": "common", "rarityLabel": "Commun",
+      "baseYieldPerMin": 20,
+      "tooltip": "Eau de source pure. Ingrédient de base de presque toutes les recettes."
+    }
+  ]
+}
