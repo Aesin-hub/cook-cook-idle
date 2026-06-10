@@ -1,19 +1,13 @@
 # Sprint actif — Cooking Fantasy
 
 ## 🔄 Prompt en cours
-**008 — Sauvegarde Supabase (auth + save cloud)**
+_(aucun — Phase 2.5 terminée)_
 
----
+## ✅ Derniers prompts exécutés
+- 013 — Admin Panel ✅ (2026-06-10)
+- 012 — Migration JSON → Supabase ✅ (2026-06-10)
+- AUDIT — Audit Phase 1 & 2 ✅ (2026-06-10)
 
-## ✅ Critères de succès
-- [ ] `npm run build` sans erreur
-- [ ] Projet Supabase créé + clés dans `.env.local`
-- [ ] Auth anonyme ou email (TBD)
-- [ ] Sauvegarde cloud des 3 stores (harvest, inventory, craft)
-- [ ] Chargement au démarrage depuis Supabase
-- [ ] Fallback localStorage si offline
-
-## ➡️ Une fois ce prompt terminé
-1. Cocher les critères ci-dessus
-2. Mettre à jour `tasks/backlog.md` : déplacer `008` vers "✅ Fait"
-3. Remplacer le contenu de ce fichier par le prompt `009`
+## ➡️ Prochain prompt
+**014 — Système de progression (XP global + niveaux + usePlayerStore)**
+À générer dans Claude.ai avant d'exécuter dans Claude Code.

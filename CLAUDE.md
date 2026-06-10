@@ -188,22 +188,37 @@ Quand un prompt est exécuté :
 ## État actuel du projet (à mettre à jour après chaque prompt)
 
 ### Prompts exécutés
-- [ ] 001 — Init projet
-- [ ] 002 — Données JSON
-- [ ] 003 — Timers idle
-- [ ] 004 — Craft system
-- [ ] 005 — UI Récolte
-- [ ] 006 — UI Craft
-- [ ] 007 — UI Inventaire
-- [ ] 008 — Sauvegarde Supabase
+- [x] 001 — Init projet
+- [x] 002 — Données JSON
+- [x] 003 — Timers idle
+- [x] 004 — Craft system
+- [x] 005 — UI Récolte
+- [x] 006 — UI Craft
+- [x] 007 — UI Inventaire
+- [x] 008 — Sauvegarde Supabase
+- [x] 009 — Données Cook (machines + furnace-levels + types)
+- [x] 010 — Store Cook (useCookStore + gameLoop + offline)
+- [x] 011 — UI Cook (CookPage + FurnaceCard + modals)
+- [x] AUDIT — Audit Phase 1 & 2
+- [x] 012 — Migration JSON → Supabase (6 tables game data)
+- [x] 013 — Admin Panel (CRUD complet)
 
 ### Pages disponibles
 - `HarvestPage` — onglet Récolte (camp + expéditions + offline modal)
 - `CraftPage` — onglet Craft (recettes + file + XP)
+- `CookPage` — onglet Cook (fourneaux + machines + lignes de production)
 - `InventoryPage` — onglet Sac (liste filtrée + tri + summary)
-- Craft / Cook / Carte — placeholders `<ComingSoon>`
+- `AdminPage` — route `/admin` (CRUD régions / ressources / recettes / machines)
+- Carte — placeholder `<ComingSoon>`
+
+### Supabase
+- 5 tables de sauvegarde : `player_saves`, `save_inventory`, `save_harvest`, `save_craft` + RLS
+- 6 tables de données de jeu : `game_regions`, `game_resources`, `game_craft_recipes`, `game_cook_recipes`, `game_machines`, `game_furnace_levels` + RLS
+- Auth email activée, `VITE_ADMIN_EMAIL=lewis.bock@gmail.com`
+
+### Ressource eau
+- `eau` est dans la région `foret` (déplacée depuis `plaine` pour éviter le deadlock de progression)
 
 ### Prochaine étape
-**Prompt 008 — Sauvegarde Supabase**
-Remplace le localStorage par une sauvegarde cloud.
-Nécessite : créer un projet Supabase + ajouter les clés dans `.env.local`
+**Prompt 014 — Système de progression (XP global + niveaux + usePlayerStore)**
+À générer dans Claude.ai avant d'exécuter.

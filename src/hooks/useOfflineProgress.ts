@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useHarvestStore } from '../stores/useHarvestStore'
 import { useInventoryStore } from '../stores/useInventoryStore'
+import { useCookStore } from '../stores/useCookStore'
 import { RESOURCES } from '../data'
 import type { OfflineProgressResult } from '../types/harvest'
 
 export interface OfflineProgressDisplay extends OfflineProgressResult {
   yieldsDisplay: { name: string; emoji: string; amount: number }[]
+  cookResultsDisplay: { name: string; emoji: string; amount: number }[]
   elapsedLabel: string
   dismiss: () => void
 }
@@ -19,26 +21,44 @@ function formatElapsed(ms: number): string {
 }
 
 export function useOfflineProgress(): OfflineProgressDisplay | null {
-  const calculateOfflineProgress = useHarvestStore((state) => state.calculateOfflineProgress)
+  const calculateHarvestOffline = useHarvestStore((state) => state.calculateOfflineProgress)
+  const calculateCookOffline = useCookStore((state) => state.calculateOfflineProgress)
   const addResources = useInventoryStore((state) => state.addResources)
   const [result, setResult] = useState<OfflineProgressDisplay | null>(null)
 
   useEffect(() => {
-    const { yields, elapsedMs, cappedAt8h } = calculateOfflineProgress()
-    if (elapsedMs < 60000 || yields.length === 0) return
+    const { yields, elapsedMs, cappedAt8h } = calculateHarvestOffline()
+    const { results: cookResults } = calculateCookOffline()
 
-    addResources(yields)
+    if (elapsedMs < 60000 && cookResults.length === 0) return
+
+    if (yields.length > 0) addResources(yields)
 
     const yieldsDisplay = yields
       .map((y) => {
         const resource = RESOURCES.find((r) => r.id === y.resourceId)
-        return { name: resource?.name ?? y.resourceId, emoji: resource?.emoji ?? '📦', amount: Math.floor(y.amount) }
+        return {
+          name: resource?.name ?? y.resourceId,
+          emoji: resource?.emoji ?? '📦',
+          amount: Math.floor(y.amount),
+        }
       })
       .filter((y) => y.amount > 0)
+
+    const cookResultsDisplay = cookResults
+      .filter((r) => r.amount >= 0.1)
+      .map((r) => ({
+        name: r.outputName,
+        emoji: r.outputEmoji,
+        amount: Math.floor(r.amount),
+      }))
+
+    if (yieldsDisplay.length === 0 && cookResultsDisplay.length === 0) return
 
     setResult({
       yields,
       yieldsDisplay,
+      cookResultsDisplay,
       elapsedMs,
       cappedAt8h,
       elapsedLabel: formatElapsed(elapsedMs),

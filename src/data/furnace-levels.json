@@ -1,0 +1,29 @@
+{
+  "furnaceLevels": [
+    {
+      "furnaceCount": 1,
+      "requiredXp": 0,
+      "unlockMessage": "Ton premier fourneau est prêt. Lance ta première ligne de production !"
+    },
+    {
+      "furnaceCount": 2,
+      "requiredXp": 200,
+      "unlockMessage": "Deuxième fourneau débloqué ! Tu peux maintenant cuisiner deux recettes en parallèle."
+    },
+    {
+      "furnaceCount": 3,
+      "requiredXp": 600,
+      "unlockMessage": "Troisième fourneau ! Ton atelier prend forme."
+    },
+    {
+      "furnaceCount": 4,
+      "requiredXp": 1500,
+      "unlockMessage": "Quatrième fourneau. Un vrai chef s'installe."
+    },
+    {
+      "furnaceCount": 5,
+      "requiredXp": 3000,
+      "unlockMessage": "Cinquième fourneau ! La cuisine tourne à plein régime."
+    }
+  ]
+}

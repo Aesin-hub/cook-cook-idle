@@ -1,0 +1,69 @@
+{
+  "machines": [
+    {
+      "id": "four_basique",
+      "name": "Four Basique",
+      "emoji": "🔥",
+      "description": "Un four en pierre rudimentaire. Chauffe lentement mais efficacement.",
+      "tooltip": "Augmente la vitesse de cuisson de 20%. Compatible avec toutes les recettes chaudes.",
+      "tier": 1,
+      "speedMultiplier": 1.2,
+      "efficiencyBonus": 0,
+      "compatibleRecipes": null,
+      "unlockLevel": 1,
+      "unlockXp": 0
+    },
+    {
+      "id": "couteau_cuisine",
+      "name": "Couteau de Cuisine",
+      "emoji": "🔪",
+      "description": "Un couteau bien aiguisé pour découper les ingrédients avec précision.",
+      "tooltip": "Réduit la consommation d'ingrédients de 10% grâce à une découpe optimale.",
+      "tier": 1,
+      "speedMultiplier": 1.0,
+      "efficiencyBonus": 0.1,
+      "compatibleRecipes": null,
+      "unlockLevel": 2,
+      "unlockXp": 50
+    },
+    {
+      "id": "petrin_bois",
+      "name": "Pétrin en Bois",
+      "emoji": "🪵",
+      "description": "Un pétrin artisanal pour travailler les pâtes.",
+      "tooltip": "Spécialisé dans les recettes à base de farine. +30% de vitesse sur ces recettes.",
+      "tier": 1,
+      "speedMultiplier": 1.3,
+      "efficiencyBonus": 0,
+      "compatibleRecipes": ["pizza_fantastique"],
+      "unlockLevel": 3,
+      "unlockXp": 150
+    },
+    {
+      "id": "chaudron_cuivre",
+      "name": "Chaudron en Cuivre",
+      "emoji": "🫕",
+      "description": "Un grand chaudron pour les soupes et bouillons en grande quantité.",
+      "tooltip": "Double la quantité produite par batch pour les recettes de soupe et bouillon.",
+      "tier": 2,
+      "speedMultiplier": 1.0,
+      "efficiencyBonus": 0,
+      "compatibleRecipes": ["soupe_champignons", "gelee_slime"],
+      "unlockLevel": 5,
+      "unlockXp": 400
+    },
+    {
+      "id": "four_magique",
+      "name": "Four Magique",
+      "emoji": "✨",
+      "description": "Un four enchanté aux runes elfiques. Sa chaleur est constante et parfaite.",
+      "tooltip": "Vitesse ×1.5 et efficacité +15% sur toutes les recettes. Machine de tier 3.",
+      "tier": 3,
+      "speedMultiplier": 1.5,
+      "efficiencyBonus": 0.15,
+      "compatibleRecipes": null,
+      "unlockLevel": 10,
+      "unlockXp": 1200
+    }
+  ]
+}

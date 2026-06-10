@@ -1,33 +1,68 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useGameLoop } from './hooks/useGameLoop'
 import { useOfflineProgress } from './hooks/useOfflineProgress'
+import { useSaveManager } from './hooks/useSaveManager'
+import { useLoadSave } from './hooks/useLoadSave'
+import { useGameData } from './hooks/useGameData'
+import { useAuthStore } from './stores/useAuthStore'
 import { useToast, ToastManager } from './components/shared/ToastManager'
 import { OfflineModal } from './components/shared/OfflineModal'
 import { AppShell } from './components/layout/AppShell'
 import { HarvestPage } from './pages/HarvestPage'
 import { CraftPage } from './pages/CraftPage'
 import { InventoryPage } from './pages/InventoryPage'
+import { CookPage } from './pages/CookPage'
+import { AuthPage } from './pages/AuthPage'
+import { AdminPage } from './pages/AdminPage'
 import type { CraftResult } from './types/craft'
+import type { ProductionResult } from './types/cook'
 
 type Tab = 'harvest' | 'craft' | 'cook' | 'inventory' | 'map'
 
-function App() {
+function GameApp() {
   const [activeTab, setActiveTab] = useState<Tab>('harvest')
   const addToast = useToast()
 
-  useGameLoop((craftResults: CraftResult[]) => {
-    craftResults.forEach((result) => {
-      addToast(`${result.recipeEmoji} +${result.output.amount} ${result.recipeName} crafté ! (+${result.xpGained} XP)`, 'success')
-    })
-  })
+  useGameLoop(
+    (craftResults: CraftResult[]) => {
+      craftResults.forEach((result) => {
+        addToast(`${result.recipeEmoji} +${result.output.amount} ${result.recipeName} crafté ! (+${result.xpGained} XP)`, 'success')
+      })
+    },
+    (cookResults: ProductionResult[]) => {
+      cookResults.forEach((result) => {
+        if (result.amount >= 0.5) {
+          addToast(`${result.outputEmoji} +${Math.floor(result.amount)} ${result.outputName} cuisiné ! (+${result.xpGained} XP)`, 'success')
+        }
+      })
+    },
+    (message: string) => {
+      addToast(`🍳 ${message}`, 'success')
+    }
+  )
 
   const offlineProgress = useOfflineProgress()
+  useSaveManager()
+  const loadStatus = useLoadSave()
+
+  if (loadStatus === 'loading') {
+    return (
+      <div style={{
+        minHeight: '100dvh', background: '#0d1117',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flexDirection: 'column', gap: '12px',
+      }}>
+        <div style={{ fontSize: '40px' }}>🍖</div>
+        <p style={{ fontSize: '14px', color: '#636e8a' }}>Chargement de ta sauvegarde...</p>
+      </div>
+    )
+  }
 
   const renderPage = () => {
     switch (activeTab) {
       case 'harvest':   return <HarvestPage />
       case 'craft':     return <CraftPage />
-      case 'cook':      return <ComingSoon label="🍳 Cook" color="#ff9500" />
+      case 'cook':      return <CookPage />
       case 'inventory': return <InventoryPage />
       case 'map':       return <ComingSoon label="🗺️ Carte" color="#636e8a" />
     }
@@ -42,6 +77,45 @@ function App() {
       </AppShell>
     </>
   )
+}
+
+function App() {
+  const { user, loading, initialize } = useAuthStore()
+  const { loaded: gameDataLoaded } = useGameData()
+
+  useEffect(() => {
+    initialize()
+  }, [initialize])
+
+  // Route /admin — avant tout check auth
+  const isAdminRoute = window.location.pathname === '/admin'
+  if (isAdminRoute) {
+    return (
+      <>
+        <ToastManager />
+        <AdminPage />
+      </>
+    )
+  }
+
+  if (loading || !gameDataLoaded) {
+    return (
+      <div style={{
+        minHeight: '100dvh', background: '#0d1117',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flexDirection: 'column', gap: '8px',
+      }}>
+        <div style={{ fontSize: '40px' }}>🍖</div>
+        <p style={{ fontSize: '13px', color: '#636e8a' }}>
+          {!gameDataLoaded ? 'Chargement des données du jeu...' : 'Vérification de la session...'}
+        </p>
+      </div>
+    )
+  }
+
+  if (!user) return <AuthPage />
+
+  return <GameApp />
 }
 
 function ComingSoon({ label, color }: { label: string; color: string }) {

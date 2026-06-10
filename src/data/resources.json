@@ -80,9 +80,9 @@
     },
     {
       "id": "eau", "name": "Eau", "emoji": "💧",
-      "region": "plaine", "rarity": "common", "rarityLabel": "Commun",
+      "region": "foret", "rarity": "common", "rarityLabel": "Commun",
       "baseYieldPerMin": 20,
-      "tooltip": "Eau de source pure. Ingrédient de base de presque toutes les recettes."
+      "tooltip": "Eau de source pure tirée des ruisseaux de la forêt. Ingrédient de base de presque toutes les recettes."
     }
   ]
 }

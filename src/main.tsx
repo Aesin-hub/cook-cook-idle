@@ -8,3 +8,10 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </StrictMode>,
 )
+
+if (import.meta.env.DEV) {
+  import('./lib/seedGameData').then(({ seedGameData }) => {
+    ;(window as any).seedGameData = seedGameData
+    console.log('[Dev] seedGameData() disponible dans la console')
+  })
+}
