@@ -204,6 +204,7 @@ Quand un prompt est exécuté :
 - [x] 013 — Admin Panel (CRUD complet)
 - [x] 013-bis — Migration stores Phase 2 → Phase 3 (types carte, multiplicateurs)
 - [x] 014 — usePlayerStore (XP global + 6 classes × 10 niveaux)
+- [x] 015 — Données carte 31×31 + créatures + admin carte
 
 ### Pages disponibles
 - `HarvestPage` — onglet Récolte (camp + expéditions + offline modal)
@@ -222,7 +223,7 @@ Quand un prompt est exécuté :
 - `eau` est dans la région `foret` (déplacée depuis `plaine` pour éviter le deadlock de progression)
 
 ### Prochaine étape
-**Prompt 015 — Données carte 31×31 + créatures + admin carte**
+**Prompt 016 — useMapStore (brouillard de guerre + déplacement + quotas)**
 
 ---
 

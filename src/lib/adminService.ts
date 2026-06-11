@@ -7,6 +7,7 @@ type TableName =
   | 'game_cook_recipes'
   | 'game_machines'
   | 'game_furnace_levels'
+  | 'game_creatures'
 
 export async function fetchAll<T>(table: TableName): Promise<T[]> {
   const { data, error } = await supabase

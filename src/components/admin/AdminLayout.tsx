@@ -7,6 +7,8 @@ type AdminSection =
   | 'craft-recipes'
   | 'cook-recipes'
   | 'machines'
+  | 'creatures'
+  | 'map'
 
 const SECTIONS: { id: AdminSection; label: string; emoji: string }[] = [
   { id: 'regions',       label: 'Régions',         emoji: '🗺️' },
@@ -14,6 +16,8 @@ const SECTIONS: { id: AdminSection; label: string; emoji: string }[] = [
   { id: 'craft-recipes', label: 'Recettes Craft',   emoji: '⚗️' },
   { id: 'cook-recipes',  label: 'Recettes Cook',    emoji: '🍳' },
   { id: 'machines',      label: 'Machines',         emoji: '🔧' },
+  { id: 'creatures',     label: 'Créatures',        emoji: '🐉' },
+  { id: 'map',           label: 'Carte',            emoji: '🗾' },
 ]
 
 interface AdminLayoutProps {

@@ -11,6 +11,7 @@ import furnaceLevelsData from '../data/furnace-levels.json'
 
 import type { Resource, Region, CraftRecipe, CookRecipe } from '../types/game'
 import type { Machine, FurnaceLevel } from '../types/cook'
+import type { Creature } from '../types/creature'
 
 interface GameDataState {
   resources: Resource[]
@@ -19,6 +20,7 @@ interface GameDataState {
   cookRecipes: CookRecipe[]
   machines: Machine[]
   furnaceLevels: FurnaceLevel[]
+  creatures: Creature[]
   loaded: boolean
   source: 'supabase' | 'local' | 'none'
 }
@@ -34,6 +36,7 @@ const LOCAL_DEFAULTS: Omit<GameDataState, 'loaded' | 'source'> = {
   cookRecipes: cookRecipesData.cookRecipes as CookRecipe[],
   machines: machinesData.machines as Machine[],
   furnaceLevels: furnaceLevelsData.furnaceLevels as FurnaceLevel[],
+  creatures: [],
 }
 
 export const useGameDataStore = create<GameDataState & GameDataActions>((set) => ({
@@ -81,7 +84,13 @@ export const useGameDataStore = create<GameDataState & GameDataActions>((set) =>
         return
       }
 
-      set({ regions, resources, craftRecipes, cookRecipes, machines, furnaceLevels, loaded: true, source: 'supabase' })
+      // Charger les créatures séparément (table peut ne pas encore exister)
+      const creaturesRes = await supabase.from('game_creatures').select('data').order('id')
+      const creatures = creaturesRes.error
+        ? []
+        : (creaturesRes.data?.map((r) => r.data) as Creature[] ?? [])
+
+      set({ regions, resources, craftRecipes, cookRecipes, machines, furnaceLevels, creatures, loaded: true, source: 'supabase' })
       console.log('[GameData] ✅ Données chargées depuis Supabase')
 
     } catch (err) {
