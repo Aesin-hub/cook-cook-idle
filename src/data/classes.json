@@ -60,7 +60,7 @@
       "emoji": "🗺️",
       "description": "Maîtrise de la carte et du brouillard de guerre",
       "levels": [
-        { "level": 1,  "xpRequired": 50,   "bonus": { "type": "unlock_feature", "value": 1, "feature": "reveal_diagonals" }, "description": "Dévoilement en 8 directions" },
+        { "level": 1,  "xpRequired": 50,   "bonus": { "type": "unlock_feature", "value": 1, "feature": "reveal_adjacent_rarity" }, "description": "Révèle la rareté des tuiles adjacentes sans les explorer" },
         { "level": 2,  "xpRequired": 150,  "bonus": { "type": "unlock_feature", "value": 1, "feature": "show_rarity_before_explore" }, "description": "Rareté des tuiles visible avant exploration" },
         { "level": 3,  "xpRequired": 350,  "bonus": { "type": "travel_time_multiplier", "value": 0.75 }, "description": "Coût déplacement -25%" },
         { "level": 4,  "xpRequired": 700,  "bonus": { "type": "unlock_feature", "value": 1, "feature": "detect_special_tiles" }, "description": "Détecte tuiles spéciales dans un rayon de 2" },

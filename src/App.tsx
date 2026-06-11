@@ -41,7 +41,8 @@ function GameApp() {
     (message: string) => {
       addToast(`🍳 ${message}`, 'success')
     },
-    getHarvestMultipliers()
+    getHarvestMultipliers(),
+    () => { addToast('⛺ Camp installé ! Nouvelles ressources disponibles.', 'success') }
   )
 
   const offlineProgress = useOfflineProgress()

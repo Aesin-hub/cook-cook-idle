@@ -3,6 +3,7 @@ import { useHarvestStore } from '../stores/useHarvestStore'
 import { useInventoryStore } from '../stores/useInventoryStore'
 import { useCraftStore } from '../stores/useCraftStore'
 import { useCookStore } from '../stores/useCookStore'
+import { useMapStore } from '../stores/useMapStore'
 import { DEFAULT_HARVEST_MULTIPLIERS } from '../types/map'
 import type { HarvestMultipliers } from '../types/map'
 import type { ProductionResult } from '../types/cook'
@@ -14,8 +15,8 @@ export function useGameLoop(
   onCraftComplete?: (results: CraftResult[]) => void,
   onCookComplete?: (results: ProductionResult[]) => void,
   onFurnaceUnlocked?: (message: string) => void,
-  // Phase 3 — multiplicateurs de classes (1.0 par défaut = neutre)
   harvestMultipliers: HarvestMultipliers = DEFAULT_HARVEST_MULTIPLIERS,
+  onCampArrived?: () => void,
 ) {
   const harvestTick = useHarvestStore((state) => state.tick)
   const addResources = useInventoryStore((state) => state.addResources)
@@ -60,11 +61,20 @@ export function useGameLoop(
           onFurnaceUnlocked?.(unlockMessage)
         }
       }
+
+      // 4. Vérifier arrivée du camp
+      const justArrived = useMapStore.getState().checkArrival()
+      if (justArrived) {
+        onCampArrived?.()
+      }
+
+      // 5. Reset quotas à minuit
+      useMapStore.getState().resetQuotasIfNeeded()
     }, TICK_INTERVAL_MS)
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
     }
   }, [harvestTick, addResources, craftTick, cookTick, syncFurnaceCount,
-      onCraftComplete, onCookComplete, onFurnaceUnlocked])
+      onCraftComplete, onCookComplete, onFurnaceUnlocked, onCampArrived])
 }

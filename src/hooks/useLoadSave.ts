@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAuthStore } from '../stores/useAuthStore'
 import { loadSave, applyLoadedSave } from '../lib/saveService'
+import { useMapStore } from '../stores/useMapStore'
 
 export type LoadStatus = 'idle' | 'loading' | 'done' | 'error'
 
@@ -19,6 +20,10 @@ export function useLoadSave(): LoadStatus {
     loadSave(user.id)
       .then(({ inventory, harvest, craft }) => {
         return applyLoadedSave(inventory, harvest, craft)
+      })
+      .then(async () => {
+        await useMapStore.getState().loadTiles()
+        await useMapStore.getState().loadPlayerSave(user.id)
       })
       .then(() => setStatus('done'))
       .catch((err) => {
