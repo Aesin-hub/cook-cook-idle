@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useHarvestStore } from '../stores/useHarvestStore'
 import { useInventoryStore } from '../stores/useInventoryStore'
 import { useCookStore } from '../stores/useCookStore'
+import { useBestiaryStore } from '../stores/useBestiaryStore'
 import { RESOURCES } from '../data'
 import type { OfflineProgressResult } from '../types/harvest'
 
@@ -29,12 +30,18 @@ export function useOfflineProgress(): OfflineProgressDisplay | null {
   useEffect(() => {
     const { yields, elapsedMs, cappedAt8h } = calculateHarvestOffline()
     const { results: cookResults } = calculateCookOffline()
+    const familiarYield = useBestiaryStore.getState().familiarTick()
 
     if (elapsedMs < 60000 && cookResults.length === 0) return
 
-    if (yields.length > 0) addResources(yields)
+    const allYields = [...yields]
+    if (familiarYield && familiarYield.amount > 0) {
+      allYields.push(familiarYield)
+    }
 
-    const yieldsDisplay = yields
+    if (allYields.length > 0) addResources(allYields)
+
+    const yieldsDisplay = allYields
       .map((y) => {
         const resource = RESOURCES.find((r) => r.id === y.resourceId)
         return {

@@ -61,6 +61,7 @@ export async function saveAll(userId: string): Promise<void> {
   const { useHarvestStore } = await import('../stores/useHarvestStore')
   const { useCraftStore } = await import('../stores/useCraftStore')
   const { useMapStore } = await import('../stores/useMapStore')
+  const { useBestiaryStore } = await import('../stores/useBestiaryStore')
 
   const inventory = useInventoryStore.getState()
   const harvest = useHarvestStore.getState()
@@ -71,6 +72,7 @@ export async function saveAll(userId: string): Promise<void> {
     saveHarvest(userId, harvest.camp, harvest.expeditions, harvest.lastSavedAt),
     saveCraft(userId, craft.queue, craft.craftedOnce),
     useMapStore.getState().saveToSupabase(userId),
+    useBestiaryStore.getState().saveToSupabase(userId),
   ])
 }
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useAuthStore } from '../stores/useAuthStore'
 import { loadSave, applyLoadedSave } from '../lib/saveService'
 import { useMapStore } from '../stores/useMapStore'
+import { useBestiaryStore } from '../stores/useBestiaryStore'
 
 export type LoadStatus = 'idle' | 'loading' | 'done' | 'error'
 
@@ -24,6 +25,8 @@ export function useLoadSave(): LoadStatus {
       .then(async () => {
         await useMapStore.getState().loadTiles()
         await useMapStore.getState().loadPlayerSave(user.id)
+        await useBestiaryStore.getState().loadPlayerSave(user.id)
+        await useBestiaryStore.getState().loadBosses()
       })
       .then(() => setStatus('done'))
       .catch((err) => {

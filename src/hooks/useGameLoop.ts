@@ -4,6 +4,8 @@ import { useInventoryStore } from '../stores/useInventoryStore'
 import { useCraftStore } from '../stores/useCraftStore'
 import { useCookStore } from '../stores/useCookStore'
 import { useMapStore } from '../stores/useMapStore'
+import { useBestiaryStore } from '../stores/useBestiaryStore'
+import { usePlayerStore } from '../stores/usePlayerStore'
 import { DEFAULT_HARVEST_MULTIPLIERS } from '../types/map'
 import type { HarvestMultipliers } from '../types/map'
 import type { ProductionResult } from '../types/cook'
@@ -62,14 +64,25 @@ export function useGameLoop(
         }
       }
 
-      // 4. Vérifier arrivée du camp
+      // 4. Tick familier
+      const familiarYield = useBestiaryStore.getState().familiarTick()
+      if (familiarYield && familiarYield.amount > 0) {
+        addResources([familiarYield])
+      }
+
+      // 5. Vérifier arrivée du camp
       const justArrived = useMapStore.getState().checkArrival()
       if (justArrived) {
         onCampArrived?.()
       }
 
-      // 5. Reset quotas à minuit
+      // 6. Reset quotas à minuit
       useMapStore.getState().resetQuotasIfNeeded()
+
+      // 7. Nettoyage modifiers expirés (toutes les minutes)
+      if (Date.now() % 60000 < 1000) {
+        usePlayerStore.getState().cleanExpiredModifiers()
+      }
     }, TICK_INTERVAL_MS)
 
     return () => {
