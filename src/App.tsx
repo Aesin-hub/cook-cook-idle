@@ -13,6 +13,7 @@ import { HarvestPage } from './pages/HarvestPage'
 import { CraftPage } from './pages/CraftPage'
 import { InventoryPage } from './pages/InventoryPage'
 import { CookPage } from './pages/CookPage'
+import { MapPage } from './pages/MapPage'
 import { AuthPage } from './pages/AuthPage'
 import { AdminPage } from './pages/AdminPage'
 import type { CraftResult } from './types/craft'
@@ -68,7 +69,7 @@ function GameApp() {
       case 'craft':     return <CraftPage />
       case 'cook':      return <CookPage />
       case 'inventory': return <InventoryPage />
-      case 'map':       return <ComingSoon label="🗺️ Carte" color="#636e8a" />
+      case 'map':       return <MapPage />
     }
   }
 
@@ -122,14 +123,5 @@ function App() {
   return <GameApp />
 }
 
-function ComingSoon({ label, color }: { label: string; color: string }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh', flexDirection: 'column', gap: '12px' }}>
-      <div style={{ fontSize: '48px' }}>{label.split(' ')[0]}</div>
-      <p style={{ fontSize: '16px', color, fontWeight: 600 }}>{label}</p>
-      <p style={{ fontSize: '13px', color: '#636e8a' }}>En construction — prompt suivant</p>
-    </div>
-  )
-}
 
 export default App
