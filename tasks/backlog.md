@@ -22,20 +22,29 @@
 - 012 — Migration JSON → Supabase (6 tables game data + seedGameData) ✅ (2026-06-10)
 - 013 — Admin Panel (CRUD régions / ressources / recettes / machines) ✅ (2026-06-10)
 
+### Phase 3 — World & Progression
+- 013-bis — Migration stores Phase 2 → Phase 3 (types carte, multiplicateurs) ✅ (2026-06-11)
+
 ## 🔄 En cours
-_(vide)_
+- 014 — usePlayerStore (XP global + 6 classes × 10 niveaux)
 
 ## 📋 À faire
 
-### Phase 3 — World & Progression
-- 014 — Système de progression (XP global + niveaux + usePlayerStore)
-- 015 — Carte d'exploration (grille + brouillard de guerre + déblocage régions)
-- 016 — Système de classes (Récolteur / Artisan / Cuisinier / Explorateur / Chasseur / Érudit)
+### Phase 3 (suite)
+- 015 — Données carte 31×31 + créatures + admin carte
+- 016 — useMapStore (brouillard de guerre + déplacement + quotas)
+- 017 — Extension usePlayerStore (classModifiers, activeEvents, prestigeLevel)
+- 018 — useBestiaryStore + Edge Function boss spawns
+- 019 — UI Carte (grille joueur 31×31, pan/zoom, bottom sheet)
+- 020 — UI Classes & Profil (ProfilePage + ClassCard + FamiliarCollection)
+- AUDIT Phase 3
+
+### Post-Phase 3
+- 021 — Craft Automatique (seuils de stock + chaînes Cook)
+- 022 — Cahier de Recettes (vraies recettes depuis le Profil)
 
 ### Phase 4 — Social & Méta
-- 017 — Routes commerciales / échanges entre joueurs
-- 018 — Progression longue durée / méta
-- 019 — Monétisation (cosmétiques uniquement, zéro p2w)
+- Commerce avec villages, cartes à collectionner, monétisation cosmétique
 
 ---
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useGameLoop } from './hooks/useGameLoop'
+import { DEFAULT_HARVEST_MULTIPLIERS } from './types/map'
 import { useOfflineProgress } from './hooks/useOfflineProgress'
 import { useSaveManager } from './hooks/useSaveManager'
 import { useLoadSave } from './hooks/useLoadSave'
@@ -38,7 +39,9 @@ function GameApp() {
     },
     (message: string) => {
       addToast(`🍳 ${message}`, 'success')
-    }
+    },
+    // Phase 3 — sera remplacé par usePlayerStore.getHarvestMultipliers() au prompt 014
+    DEFAULT_HARVEST_MULTIPLIERS
   )
 
   const offlineProgress = useOfflineProgress()

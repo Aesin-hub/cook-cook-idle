@@ -3,6 +3,8 @@ import { useHarvestStore } from '../stores/useHarvestStore'
 import { useInventoryStore } from '../stores/useInventoryStore'
 import { useCraftStore } from '../stores/useCraftStore'
 import { useCookStore } from '../stores/useCookStore'
+import { DEFAULT_HARVEST_MULTIPLIERS } from '../types/map'
+import type { HarvestMultipliers } from '../types/map'
 import type { ProductionResult } from '../types/cook'
 import type { CraftResult } from '../types/craft'
 
@@ -12,6 +14,8 @@ export function useGameLoop(
   onCraftComplete?: (results: CraftResult[]) => void,
   onCookComplete?: (results: ProductionResult[]) => void,
   onFurnaceUnlocked?: (message: string) => void,
+  // Phase 3 — multiplicateurs de classes (1.0 par défaut = neutre)
+  harvestMultipliers: HarvestMultipliers = DEFAULT_HARVEST_MULTIPLIERS,
 ) {
   const harvestTick = useHarvestStore((state) => state.tick)
   const addResources = useInventoryStore((state) => state.addResources)
@@ -21,11 +25,23 @@ export function useGameLoop(
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
+  // Stocker les multiplicateurs dans une ref pour éviter de recréer l'interval
+  const multipliersRef = useRef(harvestMultipliers)
+  multipliersRef.current = harvestMultipliers
+
   useEffect(() => {
     intervalRef.current = setInterval(() => {
-      const harvestYields = harvestTick()
-      if (harvestYields.length > 0) addResources(harvestYields)
+      // 1. Harvest — avec multiplicateur de yield
+      const rawYields = harvestTick()
+      if (rawYields.length > 0) {
+        const multipliedYields = rawYields.map((y) => ({
+          ...y,
+          amount: y.amount * multipliersRef.current.yieldMultiplier,
+        }))
+        addResources(multipliedYields)
+      }
 
+      // 2. Craft
       const craftResults = craftTick()
       if (craftResults.length > 0) {
         onCraftComplete?.(craftResults)
@@ -35,6 +51,7 @@ export function useGameLoop(
         }
       }
 
+      // 3. Cook
       const cookResults = cookTick()
       if (cookResults.length > 0) {
         onCookComplete?.(cookResults)

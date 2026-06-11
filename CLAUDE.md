@@ -202,6 +202,7 @@ Quand un prompt est exécuté :
 - [x] AUDIT — Audit Phase 1 & 2
 - [x] 012 — Migration JSON → Supabase (6 tables game data)
 - [x] 013 — Admin Panel (CRUD complet)
+- [x] 013-bis — Migration stores Phase 2 → Phase 3 (types carte, multiplicateurs)
 
 ### Pages disponibles
 - `HarvestPage` — onglet Récolte (camp + expéditions + offline modal)
@@ -220,5 +221,26 @@ Quand un prompt est exécuté :
 - `eau` est dans la région `foret` (déplacée depuis `plaine` pour éviter le deadlock de progression)
 
 ### Prochaine étape
-**Prompt 014 — Système de progression (XP global + niveaux + usePlayerStore)**
-À générer dans Claude.ai avant d'exécuter.
+**Prompt 014 — usePlayerStore (XP global + 6 classes × 10 niveaux)**
+
+---
+
+## Phase 3 — Architecture (en cours)
+
+### Carte 31×31
+- Centre : { x: 15, y: 15 }
+- Types dans `src/types/map.ts`
+- `TileCoord`, `TileRarity`, `TileDifficulty`, `TileBiome`, `TileCulture`
+- Fonctions utilitaires : `tileDistance()`, `travelTimeMs()`, `getAdjacentTiles()`,
+  `getTileCulture()`, `getTileRarity()`
+
+### Multiplicateurs de classes
+- `HarvestMultipliers` dans `src/types/map.ts`
+- `DEFAULT_HARVEST_MULTIPLIERS` : toutes les valeurs à 1.0 (neutre)
+- Passés à `useGameLoop()` comme 4ème paramètre
+- Seront fournis par `usePlayerStore.getHarvestMultipliers()` (prompt 014)
+
+### Rétrocompatibilité
+- `Camp.tileCoord` et `Expedition.tileCoord` sont optionnels
+- `RegionId` existant continue de fonctionner
+- Les stores Phase 1-2 ne sont pas modifiés en profondeur
