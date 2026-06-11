@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import classesData from '../data/classes.json'
-import type { ClassId, XpSource, PlayerState, ClassDefinition, ClassBonus } from '../types/player'
+import type { ClassId, XpSource, PlayerState, ClassDefinition, ClassBonus, ClassModifier, ActiveEvent } from '../types/player'
 import { XP_SOURCE_TO_CLASS } from '../types/player'
 import type { HarvestMultipliers } from '../types/map'
 import { DEFAULT_HARVEST_MULTIPLIERS } from '../types/map'
@@ -36,6 +36,10 @@ interface PlayerActions {
   getHarvestMultipliers: () => HarvestMultipliers
   isFeatureUnlocked: (feature: string) => boolean
   getActiveBonuses: (classId: ClassId) => ClassBonus[]
+  addClassModifier: (modifier: ClassModifier) => void
+  removeClassModifier: (modifierId: string) => void
+  activateEvent: (event: ActiveEvent) => void
+  cleanExpiredModifiers: () => void
   debugSetClassLevel: (classId: ClassId, level: number) => void
 }
 
@@ -59,6 +63,9 @@ export const usePlayerStore = create<PlayerStore>()(
       classXp: { ...INITIAL_CLASS_XP },
       classLevels: { ...INITIAL_CLASS_LEVELS },
       createdAt: Date.now(),
+      classModifiers: [],
+      activeEvents: [],
+      prestigeLevel: 0,
 
       addXp: (source, amount) => {
         const { classXp, classLevels, totalXp } = get()
@@ -109,13 +116,14 @@ export const usePlayerStore = create<PlayerStore>()(
       },
 
       getHarvestMultipliers: (): HarvestMultipliers => {
-        const { classLevels } = get()
+        const { classLevels, classModifiers, activeEvents } = get()
 
         let yieldMultiplier = DEFAULT_HARVEST_MULTIPLIERS.yieldMultiplier
         let expeditionMultiplier = DEFAULT_HARVEST_MULTIPLIERS.expeditionMultiplier
         let travelTimeMultiplier = DEFAULT_HARVEST_MULTIPLIERS.travelTimeMultiplier
         let offlineCapMultiplier = DEFAULT_HARVEST_MULTIPLIERS.offlineCapMultiplier
 
+        // 1. Bonus des niveaux de classe (max pour buffs, min pour temps)
         for (const classId of ALL_CLASS_IDS) {
           const level = classLevels[classId] ?? 0
           if (level === 0) continue
@@ -142,7 +150,38 @@ export const usePlayerStore = create<PlayerStore>()(
           }
         }
 
-        return { yieldMultiplier, expeditionMultiplier, travelTimeMultiplier, offlineCapMultiplier }
+        // 2. Modificateurs externes (items équipés, événements actifs) — cumulatifs
+        const now = Date.now()
+        const allModifiers = [
+          ...classModifiers.filter((m) => !m.expiresAt || m.expiresAt > now),
+          ...activeEvents
+            .filter((e) => e.startsAt <= now && e.endsAt > now)
+            .flatMap((e) => e.modifiers),
+        ]
+
+        for (const mod of allModifiers) {
+          switch (mod.bonusType) {
+            case 'yield_multiplier':
+              yieldMultiplier += (mod.value - 1.0)
+              break
+            case 'expedition_multiplier':
+              expeditionMultiplier += (mod.value - 1.0)
+              break
+            case 'travel_time_multiplier':
+              travelTimeMultiplier = Math.min(travelTimeMultiplier, mod.value)
+              break
+            case 'offline_cap_multiplier':
+              offlineCapMultiplier = Math.max(offlineCapMultiplier, mod.value)
+              break
+          }
+        }
+
+        return {
+          yieldMultiplier: Math.max(0.1, yieldMultiplier),
+          expeditionMultiplier: Math.max(0.1, expeditionMultiplier),
+          travelTimeMultiplier: Math.max(0.1, travelTimeMultiplier),
+          offlineCapMultiplier: Math.max(1.0, offlineCapMultiplier),
+        }
       },
 
       isFeatureUnlocked: (feature) => {
@@ -170,6 +209,30 @@ export const usePlayerStore = create<PlayerStore>()(
           .map((l) => l.bonus)
       },
 
+      addClassModifier: (modifier) => {
+        set((state) => ({ classModifiers: [...state.classModifiers, modifier] }))
+      },
+
+      removeClassModifier: (modifierId) => {
+        set((state) => ({
+          classModifiers: state.classModifiers.filter((m) => m.id !== modifierId),
+        }))
+      },
+
+      activateEvent: (event) => {
+        set((state) => ({
+          activeEvents: [...state.activeEvents.filter((e) => e.id !== event.id), event],
+        }))
+      },
+
+      cleanExpiredModifiers: () => {
+        const now = Date.now()
+        set((state) => ({
+          classModifiers: state.classModifiers.filter((m) => !m.expiresAt || m.expiresAt > now),
+          activeEvents: state.activeEvents.filter((e) => e.endsAt > now),
+        }))
+      },
+
       debugSetClassLevel: (classId, level) => {
         if (!import.meta.env.DEV) return
         const classDef = CLASS_MAP[classId]
@@ -191,6 +254,9 @@ export const usePlayerStore = create<PlayerStore>()(
         classXp: state.classXp,
         classLevels: state.classLevels,
         createdAt: state.createdAt,
+        classModifiers: state.classModifiers,
+        activeEvents: state.activeEvents,
+        prestigeLevel: state.prestigeLevel,
       }),
     }
   )

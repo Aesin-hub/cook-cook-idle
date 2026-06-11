@@ -64,4 +64,28 @@ export interface PlayerState {
   classXp: Record<ClassId, number>
   classLevels: Record<ClassId, number>
   createdAt: number
+  classModifiers: ClassModifier[]
+  activeEvents: ActiveEvent[]
+  prestigeLevel: number
+}
+
+// ─── POINTS D'EXTENSION FUTURS ───────────────────────────────────────────────
+
+export interface ClassModifier {
+  id: string
+  source: string
+  classId: ClassId
+  bonusType: BonusType
+  value: number
+  expiresAt?: number
+  description: string
+}
+
+export interface ActiveEvent {
+  id: string
+  name: string
+  emoji: string
+  modifiers: ClassModifier[]
+  startsAt: number
+  endsAt: number
 }
