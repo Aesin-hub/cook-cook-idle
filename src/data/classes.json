@@ -1,0 +1,112 @@
+{
+  "classes": [
+    {
+      "id": "recolteur",
+      "name": "Récolteur",
+      "emoji": "🌿",
+      "description": "Maîtrise de la récolte idle et des régions",
+      "levels": [
+        { "level": 1,  "xpRequired": 50,   "bonus": { "type": "yield_multiplier", "value": 1.1 },          "description": "+10% yield toutes ressources" },
+        { "level": 2,  "xpRequired": 150,  "bonus": { "type": "expedition_slots", "value": 1 },             "description": "+1 slot d'expédition (max 4)" },
+        { "level": 3,  "xpRequired": 350,  "bonus": { "type": "yield_multiplier", "value": 1.2 },           "description": "+20% yield toutes ressources" },
+        { "level": 4,  "xpRequired": 700,  "bonus": { "type": "travel_time_multiplier", "value": 0.75 },    "description": "Temps de déplacement carte -25%" },
+        { "level": 5,  "xpRequired": 1200, "bonus": { "type": "expedition_slots", "value": 1 },             "description": "+1 slot d'expédition (max 5)" },
+        { "level": 6,  "xpRequired": 2000, "bonus": { "type": "offline_cap_multiplier", "value": 1.5 },     "description": "Offline progress plafonné à 12h" },
+        { "level": 7,  "xpRequired": 3000, "bonus": { "type": "unlock_feature", "value": 1, "feature": "dual_region_camp" }, "description": "Camp génère 2 régions simultanément" },
+        { "level": 8,  "xpRequired": 4500, "bonus": { "type": "expedition_multiplier", "value": 0.8 },      "description": "Expéditions rapportent 80% au lieu de 60%" },
+        { "level": 9,  "xpRequired": 6500, "bonus": { "type": "unlock_feature", "value": 1, "feature": "auto_reveal_adjacent" }, "description": "Découverte automatique des tuiles adjacentes" },
+        { "level": 10, "xpRequired": 9000, "bonus": { "type": "yield_multiplier", "value": 2.0 },           "description": "×2 sur toutes les ressources rares+" }
+      ]
+    },
+    {
+      "id": "artisan",
+      "name": "Artisan",
+      "emoji": "⚗️",
+      "description": "Maîtrise du craft et de la transformation",
+      "levels": [
+        { "level": 1,  "xpRequired": 50,   "bonus": { "type": "craft_time_multiplier", "value": 0.9 },  "description": "-10% temps de craft" },
+        { "level": 2,  "xpRequired": 150,  "bonus": { "type": "unlock_feature", "value": 1, "feature": "craft_queue_display" }, "description": "Affichage étendu de la file de craft" },
+        { "level": 3,  "xpRequired": 350,  "bonus": { "type": "craft_time_multiplier", "value": 0.8 },  "description": "-20% temps de craft" },
+        { "level": 4,  "xpRequired": 700,  "bonus": { "type": "craft_double_chance", "value": 0.1 },    "description": "10% de chance de craft double" },
+        { "level": 5,  "xpRequired": 1200, "bonus": { "type": "unlock_feature", "value": 1, "feature": "craft_tier2" }, "description": "Déblocage recettes craft tier 2" },
+        { "level": 6,  "xpRequired": 2000, "bonus": { "type": "craft_time_multiplier", "value": 0.7 },  "description": "-30% temps de craft" },
+        { "level": 7,  "xpRequired": 3000, "bonus": { "type": "craft_double_chance", "value": 0.2 },    "description": "20% de chance de craft double" },
+        { "level": 8,  "xpRequired": 4500, "bonus": { "type": "unlock_feature", "value": 1, "feature": "bulk_craft" }, "description": "Craft en lot ×10 sans multiplicateur de temps" },
+        { "level": 9,  "xpRequired": 6500, "bonus": { "type": "unlock_feature", "value": 1, "feature": "craft_legendary" }, "description": "Déblocage recettes craft légendaires" },
+        { "level": 10, "xpRequired": 9000, "bonus": { "type": "craft_time_multiplier", "value": 0.0 },  "description": "Craft instantané pour toutes les recettes communes" }
+      ]
+    },
+    {
+      "id": "cuisinier",
+      "name": "Cuisinier",
+      "emoji": "🍳",
+      "description": "Maîtrise des lignes de production Cook",
+      "levels": [
+        { "level": 1,  "xpRequired": 50,   "bonus": { "type": "cook_speed_multiplier", "value": 1.1 },  "description": "+10% vitesse production" },
+        { "level": 2,  "xpRequired": 150,  "bonus": { "type": "cook_efficiency", "value": 0.1 },         "description": "-10% consommation d'ingrédients" },
+        { "level": 3,  "xpRequired": 350,  "bonus": { "type": "furnace_bonus", "value": 1 },             "description": "+1 fourneau supplémentaire" },
+        { "level": 4,  "xpRequired": 700,  "bonus": { "type": "xp_multiplier", "value": 1.2 },           "description": "Plats produits donnent +20% XP" },
+        { "level": 5,  "xpRequired": 1200, "bonus": { "type": "unlock_feature", "value": 1, "feature": "cook_tier2" }, "description": "Déblocage recettes cook régionales" },
+        { "level": 6,  "xpRequired": 2000, "bonus": { "type": "cook_speed_multiplier", "value": 1.2 },  "description": "+20% vitesse production" },
+        { "level": 7,  "xpRequired": 3000, "bonus": { "type": "cook_efficiency", "value": 0.2 },         "description": "-20% consommation d'ingrédients" },
+        { "level": 8,  "xpRequired": 4500, "bonus": { "type": "furnace_bonus", "value": 1 },             "description": "+1 fourneau supplémentaire" },
+        { "level": 9,  "xpRequired": 6500, "bonus": { "type": "unlock_feature", "value": 1, "feature": "cook_legendary" }, "description": "Déblocage recettes cook légendaires" },
+        { "level": 10, "xpRequired": 9000, "bonus": { "type": "unlock_feature", "value": 1, "feature": "cook_partial_stock" }, "description": "Production continue même si stock partiellement vide" }
+      ]
+    },
+    {
+      "id": "explorateur",
+      "name": "Explorateur",
+      "emoji": "🗺️",
+      "description": "Maîtrise de la carte et du brouillard de guerre",
+      "levels": [
+        { "level": 1,  "xpRequired": 50,   "bonus": { "type": "unlock_feature", "value": 1, "feature": "reveal_diagonals" }, "description": "Dévoilement en 8 directions" },
+        { "level": 2,  "xpRequired": 150,  "bonus": { "type": "unlock_feature", "value": 1, "feature": "show_rarity_before_explore" }, "description": "Rareté des tuiles visible avant exploration" },
+        { "level": 3,  "xpRequired": 350,  "bonus": { "type": "travel_time_multiplier", "value": 0.75 }, "description": "Coût déplacement -25%" },
+        { "level": 4,  "xpRequired": 700,  "bonus": { "type": "unlock_feature", "value": 1, "feature": "detect_special_tiles" }, "description": "Détecte tuiles spéciales dans un rayon de 2" },
+        { "level": 5,  "xpRequired": 1200, "bonus": { "type": "unlock_feature", "value": 1, "feature": "spyglass" }, "description": "Longue vue : révèle 1 tuile au choix" },
+        { "level": 6,  "xpRequired": 2000, "bonus": { "type": "travel_time_multiplier", "value": 0.5 },  "description": "Coût déplacement -50%" },
+        { "level": 7,  "xpRequired": 3000, "bonus": { "type": "unlock_feature", "value": 1, "feature": "expedition_non_adjacent" }, "description": "Expéditions vers tuiles non adjacentes" },
+        { "level": 8,  "xpRequired": 4500, "bonus": { "type": "unlock_feature", "value": 1, "feature": "daily_auto_reveal" }, "description": "Dévoilement automatique d'une tuile par jour" },
+        { "level": 9,  "xpRequired": 6500, "bonus": { "type": "unlock_feature", "value": 1, "feature": "hidden_tiles_access" }, "description": "Accès aux zones cachées" },
+        { "level": 10, "xpRequired": 9000, "bonus": { "type": "unlock_feature", "value": 1, "feature": "full_rarity_reveal" }, "description": "Brouillard ne cache plus la rareté" }
+      ]
+    },
+    {
+      "id": "chasseur",
+      "name": "Chasseur",
+      "emoji": "🗡️",
+      "description": "Maîtrise du bestiaire et des drops de créatures",
+      "levels": [
+        { "level": 1,  "xpRequired": 50,   "bonus": { "type": "drop_rate_multiplier", "value": 1.1 },  "description": "+10% drop rate créatures" },
+        { "level": 2,  "xpRequired": 150,  "bonus": { "type": "unlock_feature", "value": 1, "feature": "basic_traps" }, "description": "Déblocage des pièges basiques" },
+        { "level": 3,  "xpRequired": 350,  "bonus": { "type": "drop_rate_multiplier", "value": 1.2 },  "description": "+20% drop rate" },
+        { "level": 4,  "xpRequired": 700,  "bonus": { "type": "unlock_feature", "value": 1, "feature": "boss_retry" }, "description": "Boss de zone affrontables 2×" },
+        { "level": 5,  "xpRequired": 1200, "bonus": { "type": "unlock_feature", "value": 1, "feature": "familiars" }, "description": "Déblocage des familiers" },
+        { "level": 6,  "xpRequired": 2000, "bonus": { "type": "drop_rate_multiplier", "value": 1.3 },  "description": "+30% drop rate" },
+        { "level": 7,  "xpRequired": 3000, "bonus": { "type": "unlock_feature", "value": 1, "feature": "advanced_traps" }, "description": "Pièges avancés — créatures épiques" },
+        { "level": 8,  "xpRequired": 4500, "bonus": { "type": "unlock_feature", "value": 1, "feature": "creature_producers" }, "description": "Créatures comme producteurs passifs" },
+        { "level": 9,  "xpRequired": 6500, "bonus": { "type": "unlock_feature", "value": 1, "feature": "boss_respawn" }, "description": "Boss de zone respecables à volonté" },
+        { "level": 10, "xpRequired": 9000, "bonus": { "type": "unlock_feature", "value": 1, "feature": "legendary_familiar" }, "description": "Familier légendaire débloqué" }
+      ]
+    },
+    {
+      "id": "erudit",
+      "name": "Érudit",
+      "emoji": "📚",
+      "description": "Maîtrise des recettes, du lore et des bonus de connaissance",
+      "levels": [
+        { "level": 1,  "xpRequired": 50,   "bonus": { "type": "unlock_feature", "value": 1, "feature": "rich_tooltips" }, "description": "Tooltips enrichis (lore + stats)" },
+        { "level": 2,  "xpRequired": 150,  "bonus": { "type": "xp_multiplier", "value": 1.15 },  "description": "+15% XP sur toutes les actions" },
+        { "level": 3,  "xpRequired": 350,  "bonus": { "type": "unlock_feature", "value": 1, "feature": "recipe_preview" }, "description": "Aperçu des recettes verrouillées" },
+        { "level": 4,  "xpRequired": 700,  "bonus": { "type": "xp_multiplier", "value": 1.25 },  "description": "+25% XP sur toutes les actions" },
+        { "level": 5,  "xpRequired": 1200, "bonus": { "type": "unlock_feature", "value": 1, "feature": "recipe_journal" }, "description": "Déblocage du Journal de recettes" },
+        { "level": 6,  "xpRequired": 2000, "bonus": { "type": "unlock_feature", "value": 1, "feature": "tile_analysis" }, "description": "Analyse de tuile : ressources exactes sans explorer" },
+        { "level": 7,  "xpRequired": 3000, "bonus": { "type": "xp_multiplier", "value": 1.4 },   "description": "+40% XP sur toutes les actions" },
+        { "level": 8,  "xpRequired": 4500, "bonus": { "type": "unlock_feature", "value": 1, "feature": "recipe_sharing" }, "description": "Partage de recettes (Phase 4)" },
+        { "level": 9,  "xpRequired": 6500, "bonus": { "type": "unlock_feature", "value": 1, "feature": "ratio_suggestion" }, "description": "Suggestion automatique du ratio optimal" },
+        { "level": 10, "xpRequired": 9000, "bonus": { "type": "unlock_feature", "value": 1, "feature": "all_recipes_preview" }, "description": "Toutes les recettes en aperçu débloqué" }
+      ]
+    }
+  ]
+}

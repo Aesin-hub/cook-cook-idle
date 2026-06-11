@@ -1,15 +1,19 @@
 import { beforeEach, describe, it, expect } from 'vitest'
 import { useCraftStore } from '../useCraftStore'
 import { useInventoryStore } from '../useInventoryStore'
+import { usePlayerStore } from '../usePlayerStore'
 
 // Données réelles issues de craft-recipes.json
 // bouillon_base : herbe×2 + champignon×1 + eau×3 → bouillon_base×1, 10s, firstTimeFast=true, 5xp
 // farine        : ble×3 + eau×1 → farine×2, 8s, firstTimeFast=true, 4xp
 // lingot_fer    : minerai_fer×3 → lingot_fer×1, 15s, firstTimeFast=true, 8xp
 
+const EMPTY_CLASS_RECORD = { recolteur: 0, artisan: 0, cuisinier: 0, explorateur: 0, chasseur: 0, erudit: 0 }
+
 function resetStores() {
-  useCraftStore.setState({ queue: [], totalXp: 0, craftedOnce: {} })
+  useCraftStore.setState({ queue: [], craftedOnce: {} })
   useInventoryStore.setState({ resources: {} })
+  usePlayerStore.setState({ totalXp: 0, classXp: { ...EMPTY_CLASS_RECORD }, classLevels: { ...EMPTY_CLASS_RECORD } })
   localStorage.clear()
 }
 
@@ -242,7 +246,7 @@ describe('useCraftStore — processTick', () => {
       queue: useCraftStore.getState().queue.map(j => ({ ...j, endsAt: Date.now() - 1000 }))
     })
     useCraftStore.getState().processTick()
-    expect(useCraftStore.getState().totalXp).toBe(5)
+    expect(usePlayerStore.getState().classXp.artisan).toBe(5)
   })
 
   it('quantity=3 → output×3 et xp×3', () => {
@@ -254,7 +258,7 @@ describe('useCraftStore — processTick', () => {
     const results = useCraftStore.getState().processTick()
     expect(results[0].output.amount).toBe(3)
     expect(results[0].xpGained).toBe(15)
-    expect(useCraftStore.getState().totalXp).toBe(15)
+    expect(usePlayerStore.getState().classXp.artisan).toBe(15)
   })
 
   it('marque craftedOnce après complétion', () => {

@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 import { v4 as uuidv4 } from 'uuid'
 import { CRAFT_RECIPES } from '../data'
 import { useInventoryStore } from './useInventoryStore'
+import { usePlayerStore } from './usePlayerStore'
 import type { CraftJob, CraftState, CraftResult } from '../types/craft'
 
 const FIRST_TIME_DURATION_MS = 3000
@@ -20,7 +21,6 @@ export const useCraftStore = create<CraftState & CraftActions>()(
   persist(
     (set, get) => ({
       queue: [],
-      totalXp: 0,
       craftedOnce: {},
 
       enqueueCraft: (recipeId, quantity = 1) => {
@@ -79,13 +79,12 @@ export const useCraftStore = create<CraftState & CraftActions>()(
       },
 
       processTick: () => {
-        const { queue, totalXp, craftedOnce } = get()
+        const { queue, craftedOnce } = get()
         if (queue.length === 0) return []
 
         const now = Date.now()
         const completedResults: CraftResult[] = []
         let currentQueue = [...queue]
-        let newTotalXp = totalXp
         const newCraftedOnce = { ...craftedOnce }
 
         while (currentQueue.length > 0) {
@@ -106,7 +105,7 @@ export const useCraftStore = create<CraftState & CraftActions>()(
             const outputAmount = recipe.output.quantity * job.quantity
             const xpGained = recipe.xpReward * job.quantity
             useInventoryStore.getState().addResources([{ resourceId: recipe.output.resourceId, amount: outputAmount }])
-            newTotalXp += xpGained
+            usePlayerStore.getState().addXp('craft', xpGained)
             newCraftedOnce[recipe.id] = true
 
             completedResults.push({
@@ -129,7 +128,7 @@ export const useCraftStore = create<CraftState & CraftActions>()(
           }
         }
 
-        set({ queue: currentQueue, totalXp: newTotalXp, craftedOnce: newCraftedOnce })
+        set({ queue: currentQueue, craftedOnce: newCraftedOnce })
         return completedResults
       },
 
@@ -146,7 +145,7 @@ export const useCraftStore = create<CraftState & CraftActions>()(
     }),
     {
       name: 'cooking-fantasy-craft',
-      partialize: (state) => ({ queue: state.queue, totalXp: state.totalXp, craftedOnce: state.craftedOnce }),
+      partialize: (state) => ({ queue: state.queue, craftedOnce: state.craftedOnce }),
     }
   )
 )

@@ -1,6 +1,7 @@
 import { beforeEach, describe, it, expect } from 'vitest'
 import { useCraftStore } from '../useCraftStore'
 import { useInventoryStore } from '../useInventoryStore'
+import { usePlayerStore } from '../usePlayerStore'
 import { canAffordRecipe } from '../../lib/craftHelpers'
 import { CRAFT_RECIPES } from '../../data'
 
@@ -9,9 +10,12 @@ import { CRAFT_RECIPES } from '../../data'
 // farine        : ble×3 + eau×1 → 8s, firstTimeFast=true, 4xp
 // lingot_fer    : minerai_fer×3 → 15s, firstTimeFast=true, 8xp
 
+const EMPTY_CLASS_RECORD = { recolteur: 0, artisan: 0, cuisinier: 0, explorateur: 0, chasseur: 0, erudit: 0 }
+
 function resetStores() {
-  useCraftStore.setState({ queue: [], totalXp: 0, craftedOnce: {} })
+  useCraftStore.setState({ queue: [], craftedOnce: {} })
   useInventoryStore.setState({ resources: {} })
+  usePlayerStore.setState({ totalXp: 0, classXp: { ...EMPTY_CLASS_RECORD }, classLevels: { ...EMPTY_CLASS_RECORD } })
   localStorage.clear()
 }
 
@@ -154,7 +158,7 @@ describe('useCraftStore — processTick enchaînement file', () => {
       }))
     })
     useCraftStore.getState().processTick()
-    expect(useCraftStore.getState().totalXp).toBe(9) // 5 + 4
+    expect(usePlayerStore.getState().classXp.artisan).toBe(9) // 5 + 4
   })
 
   it('craftedOnce mis à jour pour toutes les recettes complétées', () => {

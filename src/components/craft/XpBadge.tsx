@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { useCraftStore } from '../../stores/useCraftStore'
+import { usePlayerStore } from '../../stores/usePlayerStore'
 
 export function XpBadge() {
-  const totalXp = useCraftStore((state) => state.totalXp)
+  const totalXp = usePlayerStore((state) => state.classXp.artisan)
   const prevXp = useRef(totalXp)
   const [animating, setAnimating] = useState(false)
 

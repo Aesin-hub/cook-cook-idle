@@ -9,7 +9,6 @@ export interface CraftJob {
 
 export interface CraftState {
   queue: CraftJob[]
-  totalXp: number
   craftedOnce: Record<string, boolean>
 }
 

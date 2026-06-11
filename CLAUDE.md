@@ -203,6 +203,7 @@ Quand un prompt est exécuté :
 - [x] 012 — Migration JSON → Supabase (6 tables game data)
 - [x] 013 — Admin Panel (CRUD complet)
 - [x] 013-bis — Migration stores Phase 2 → Phase 3 (types carte, multiplicateurs)
+- [x] 014 — usePlayerStore (XP global + 6 classes × 10 niveaux)
 
 ### Pages disponibles
 - `HarvestPage` — onglet Récolte (camp + expéditions + offline modal)
@@ -221,7 +222,7 @@ Quand un prompt est exécuté :
 - `eau` est dans la région `foret` (déplacée depuis `plaine` pour éviter le deadlock de progression)
 
 ### Prochaine étape
-**Prompt 014 — usePlayerStore (XP global + 6 classes × 10 niveaux)**
+**Prompt 015 — Données carte 31×31 + créatures + admin carte**
 
 ---
 
@@ -237,8 +238,15 @@ Quand un prompt est exécuté :
 ### Multiplicateurs de classes
 - `HarvestMultipliers` dans `src/types/map.ts`
 - `DEFAULT_HARVEST_MULTIPLIERS` : toutes les valeurs à 1.0 (neutre)
-- Passés à `useGameLoop()` comme 4ème paramètre
-- Seront fournis par `usePlayerStore.getHarvestMultipliers()` (prompt 014)
+- Passés à `useGameLoop()` comme 4ème paramètre via `usePlayerStore.getHarvestMultipliers()`
+- `usePlayerStore` : clé persist `cooking-fantasy-player`, 6 classes × 10 niveaux
+- `debugClass(classId, level)` disponible en console dev
+
+### Classes (src/data/classes.json)
+- 6 classes : recolteur, artisan, cuisinier, explorateur, chasseur, erudit
+- 10 niveaux chacune, XP requis : 50/150/350/700/1200/2000/3000/4500/6500/9000
+- XP craft → classXp.artisan, XP cook → classXp.cuisinier
+- useCraftStore et useCookStore n'ont plus de totalXp/totalCookXp (délégué à usePlayerStore)
 
 ### Rétrocompatibilité
 - `Camp.tileCoord` et `Expedition.tileCoord` sont optionnels

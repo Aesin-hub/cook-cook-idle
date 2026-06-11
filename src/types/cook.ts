@@ -63,6 +63,5 @@ export interface ProductionResult {
 
 export interface CookState {
   furnaces: Furnace[]
-  totalCookXp: number
   unlockedFurnaceCount: number
 }

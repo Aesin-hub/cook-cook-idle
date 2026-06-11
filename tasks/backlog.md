@@ -24,9 +24,10 @@
 
 ### Phase 3 — World & Progression
 - 013-bis — Migration stores Phase 2 → Phase 3 (types carte, multiplicateurs) ✅ (2026-06-11)
+- 014 — usePlayerStore (XP global + 6 classes × 10 niveaux) ✅ (2026-06-11)
 
 ## 🔄 En cours
-- 014 — usePlayerStore (XP global + 6 classes × 10 niveaux)
+- 015 — Données carte 31×31 + créatures + admin carte
 
 ## 📋 À faire
 

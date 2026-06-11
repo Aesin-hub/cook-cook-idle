@@ -40,7 +40,6 @@ export async function saveHarvest(
 export async function saveCraft(
   userId: string,
   queue: SaveCraftRow['queue'],
-  totalXp: number,
   craftedOnce: Record<string, boolean>
 ): Promise<void> {
   const { error } = await supabase
@@ -49,7 +48,6 @@ export async function saveCraft(
       {
         user_id: userId,
         queue,
-        total_xp: totalXp,
         crafted_once: craftedOnce,
         updated_at: new Date().toISOString(),
       },
@@ -70,7 +68,7 @@ export async function saveAll(userId: string): Promise<void> {
   await Promise.all([
     saveInventory(userId, inventory.resources),
     saveHarvest(userId, harvest.camp, harvest.expeditions, harvest.lastSavedAt),
-    saveCraft(userId, craft.queue, craft.totalXp, craft.craftedOnce),
+    saveCraft(userId, craft.queue, craft.craftedOnce),
   ])
 }
 
@@ -118,7 +116,6 @@ export async function applyLoadedSave(
   if (craft) {
     useCraftStore.setState({
       queue: craft.queue,
-      totalXp: craft.total_xp,
       craftedOnce: craft.crafted_once,
     })
   }

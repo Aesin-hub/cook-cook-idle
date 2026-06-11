@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useGameLoop } from './hooks/useGameLoop'
-import { DEFAULT_HARVEST_MULTIPLIERS } from './types/map'
+import { usePlayerStore } from './stores/usePlayerStore'
 import { useOfflineProgress } from './hooks/useOfflineProgress'
 import { useSaveManager } from './hooks/useSaveManager'
 import { useLoadSave } from './hooks/useLoadSave'
@@ -23,6 +23,7 @@ type Tab = 'harvest' | 'craft' | 'cook' | 'inventory' | 'map'
 function GameApp() {
   const [activeTab, setActiveTab] = useState<Tab>('harvest')
   const addToast = useToast()
+  const getHarvestMultipliers = usePlayerStore((state) => state.getHarvestMultipliers)
 
   useGameLoop(
     (craftResults: CraftResult[]) => {
@@ -40,8 +41,7 @@ function GameApp() {
     (message: string) => {
       addToast(`🍳 ${message}`, 'success')
     },
-    // Phase 3 — sera remplacé par usePlayerStore.getHarvestMultipliers() au prompt 014
-    DEFAULT_HARVEST_MULTIPLIERS
+    getHarvestMultipliers()
   )
 
   const offlineProgress = useOfflineProgress()

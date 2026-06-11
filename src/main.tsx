@@ -14,4 +14,9 @@ if (import.meta.env.DEV) {
     ;(window as any).seedGameData = seedGameData
     console.log('[Dev] seedGameData() disponible dans la console')
   })
+  import('./stores/usePlayerStore').then(({ usePlayerStore }) => {
+    ;(window as any).debugClass = (classId: string, level: number) =>
+      usePlayerStore.getState().debugSetClassLevel(classId as any, level)
+    console.log('[Dev] debugClass(classId, level) disponible dans la console')
+  })
 }

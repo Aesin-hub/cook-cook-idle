@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware'
 import { v4 as uuidv4 } from 'uuid'
 import { COOK_RECIPES, FURNACE_LEVELS } from '../data'
 import { useInventoryStore } from './useInventoryStore'
-import { useCraftStore } from './useCraftStore'
+import { usePlayerStore } from './usePlayerStore'
 import {
   checkCanProduce,
   calcProduction,
@@ -45,7 +45,6 @@ export const useCookStore = create<CookState & CookActions>()(
           totalProduced: 0,
         },
       ],
-      totalCookXp: 0,
       unlockedFurnaceCount: 1,
 
       assignRecipe: (furnaceId, recipeId) => {
@@ -87,11 +86,10 @@ export const useCookStore = create<CookState & CookActions>()(
       },
 
       processTick: () => {
-        const { furnaces, totalCookXp, unlockedFurnaceCount } = get()
+        const { furnaces, unlockedFurnaceCount } = get()
         const inventory = useInventoryStore.getState()
         const now = Date.now()
         const results: ProductionResult[] = []
-        let newTotalCookXp = totalCookXp
 
         const updatedFurnaces = furnaces.map((furnace) => {
           if (furnace.slotIndex >= unlockedFurnaceCount) return furnace
@@ -134,7 +132,7 @@ export const useCookStore = create<CookState & CookActions>()(
           inventory.addResources([{ resourceId: recipe.id, amount: outputAmount }])
 
           const xpGained = Math.floor(outputAmount * recipe.xpReward)
-          newTotalCookXp += xpGained
+          usePlayerStore.getState().addXp('cook', xpGained)
 
           results.push({
             furnaceId: furnace.id,
@@ -156,12 +154,12 @@ export const useCookStore = create<CookState & CookActions>()(
           }
         })
 
-        set({ furnaces: updatedFurnaces, totalCookXp: newTotalCookXp })
+        set({ furnaces: updatedFurnaces })
         return results
       },
 
       calculateOfflineProgress: () => {
-        const { furnaces, totalCookXp, unlockedFurnaceCount } = get()
+        const { furnaces, unlockedFurnaceCount } = get()
         const inventory = useInventoryStore.getState()
         const now = Date.now()
 
@@ -174,7 +172,6 @@ export const useCookStore = create<CookState & CookActions>()(
         const elapsedMs = Math.min(rawElapsedMs, OFFLINE_CAP_MS)
 
         const results: ProductionResult[] = []
-        let newTotalCookXp = totalCookXp
 
         const updatedFurnaces = furnaces.map((furnace) => {
           if (furnace.slotIndex >= unlockedFurnaceCount) return furnace
@@ -224,7 +221,7 @@ export const useCookStore = create<CookState & CookActions>()(
           inventory.addResources([{ resourceId: recipe.id, amount: outputAmount }])
 
           const xpGained = Math.floor(outputAmount * recipe.xpReward)
-          newTotalCookXp += xpGained
+          usePlayerStore.getState().addXp('cook', xpGained)
 
           results.push({
             furnaceId: furnace.id,
@@ -246,14 +243,13 @@ export const useCookStore = create<CookState & CookActions>()(
           }
         })
 
-        set({ furnaces: updatedFurnaces, totalCookXp: newTotalCookXp })
+        set({ furnaces: updatedFurnaces })
         return { results, elapsedMs, cappedAt8h }
       },
 
       syncFurnaceCount: () => {
-        const { furnaces, totalCookXp, unlockedFurnaceCount } = get()
-        const craftXp = useCraftStore.getState().totalXp
-        const totalXp = craftXp + totalCookXp
+        const { furnaces, unlockedFurnaceCount } = get()
+        const totalXp = usePlayerStore.getState().totalXp
 
         const newCount = getUnlockedFurnaceCount(totalXp)
 
@@ -282,16 +278,12 @@ export const useCookStore = create<CookState & CookActions>()(
         return { newFurnaceUnlocked: true, unlockMessage }
       },
 
-      getTotalXp: () => {
-        const craftXp = useCraftStore.getState().totalXp
-        return craftXp + get().totalCookXp
-      },
+      getTotalXp: () => usePlayerStore.getState().totalXp,
     }),
     {
       name: 'cooking-fantasy-cook',
       partialize: (state) => ({
         furnaces: state.furnaces,
-        totalCookXp: state.totalCookXp,
         unlockedFurnaceCount: state.unlockedFurnaceCount,
       }),
     }
