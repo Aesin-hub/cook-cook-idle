@@ -4,13 +4,14 @@ import type { Creature } from '../../types/creature'
 import type { Resource } from '../../types/game'
 import { TILE_RARITY_LABELS, TILE_BIOME_LABELS, TILE_CULTURE_LABELS } from '../../types/tile'
 import type { TileRarity, TileBiome, TileCulture, TileDifficulty } from '../../types/map'
+import { SpriteDropdown } from '../../components/admin/SpriteDropdown'
 
 interface TileFormProps {
   tile: TileStatic
   creatures: Creature[]
   resources: Resource[]
   saving: boolean
-  onSave: (tile: TileStatic) => void
+  onSave: (tile: TileStatic, spriteId: string | null) => void
   onClear: (tile: TileStatic) => void
   onClose: () => void
 }
@@ -19,8 +20,9 @@ export function TileForm({
   tile, creatures, resources, saving, onSave, onClear, onClose
 }: TileFormProps) {
   const [form, setForm] = useState<TileStatic>(tile)
+  const [spriteId, setSpriteId] = useState<string | null>(null)
 
-  useEffect(() => { setForm(tile) }, [tile.id])
+  useEffect(() => { setForm(tile); setSpriteId(null) }, [tile.id])
 
   function update<K extends keyof TileStatic>(key: K, value: TileStatic[K]) {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -263,6 +265,16 @@ export function TileForm({
         </select>
       </div>
 
+      {/* Sprite tileset */}
+      <div style={sectionStyle}>
+        <label style={labelStyle}>Sprite (optionnel)</label>
+        <SpriteDropdown
+          category="tileset"
+          value={spriteId}
+          onChange={setSpriteId}
+        />
+      </div>
+
       {/* Actions */}
       <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
         <button
@@ -277,7 +289,7 @@ export function TileForm({
           Vider
         </button>
         <button
-          onClick={() => onSave(form)}
+          onClick={() => onSave(form, spriteId)}
           disabled={saving}
           style={{
             flex: 1, padding: '8px',

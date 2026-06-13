@@ -42,6 +42,7 @@
 
 ### Post-Phase 3
 - 022 — Cahier de Recettes (vraies recettes depuis le Profil) ✅ (2026-06-13)
+- 023 — Assets Manager (Supabase Storage + game_assets + AssetsAdmin + SpriteDropdown) ✅ (2026-06-13)
 
 ### Phase 4 — Social & Méta
 - Commerce avec villages, cartes à collectionner, monétisation cosmétique

@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
 import { fetchAll, upsertEntry, deleteEntry } from '../../lib/adminService'
 import { AdminFormModal, type FormField } from '../../components/admin/AdminFormModal'
+import { SpriteDropdown } from '../../components/admin/SpriteDropdown'
+import { assignSprite } from '../../lib/assetService'
 import { useToast } from '../../components/shared/ToastManager'
 import type { Resource } from '../../types/game'
 
@@ -48,6 +50,8 @@ export function ResourcesAdmin() {
   const [loading, setLoading] = useState(true)
   const [editItem, setEditItem] = useState<Resource | null>(null)
   const [showForm, setShowForm] = useState(false)
+  const [spriteId, setSpriteId] = useState<string | null>(null)
+  const [spriteChanged, setSpriteChanged] = useState(false)
   const [filterRegion, setFilterRegion] = useState<string>('all')
   const [filterRarity, setFilterRarity] = useState<string>('all')
   const [search, setSearch] = useState('')
@@ -78,6 +82,10 @@ export function ResourcesAdmin() {
 
   async function handleSave(values: Record<string, any>) {
     await upsertEntry('game_resources', values.id, values)
+    if (spriteChanged) {
+      await assignSprite('game_resources', values.id, spriteId)
+      setSpriteChanged(false)
+    }
     addToast(`✅ Ressource "${values.name}" sauvegardée !`, 'success')
     await load()
   }
@@ -110,7 +118,7 @@ export function ResourcesAdmin() {
           </p>
         </div>
         <button
-          onClick={() => { setEditItem(null); setShowForm(true) }}
+          onClick={() => { setEditItem(null); setSpriteId(null); setSpriteChanged(false); setShowForm(true) }}
           style={{ padding: '9px 16px', background: 'rgba(0,210,255,0.15)', border: '1px solid rgba(0,210,255,0.4)', borderRadius: '8px', color: '#00d2ff', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}
         >+ Ajouter</button>
       </div>
@@ -188,7 +196,7 @@ export function ResourcesAdmin() {
                       <td style={{ padding: '10px 12px', fontSize: '13px', color: '#30d158', fontWeight: 600 }}>{r.baseYieldPerMin}</td>
                       <td style={{ padding: '10px 12px' }}>
                         <div style={{ display: 'flex', gap: '6px' }}>
-                          <button onClick={() => { setEditItem(r); setShowForm(true) }}
+                          <button onClick={() => { setEditItem(r); setSpriteId(null); setSpriteChanged(false); setShowForm(true) }}
                             style={{ padding: '4px 10px', fontSize: '11px', background: 'rgba(0,210,255,0.08)', border: '1px solid rgba(0,210,255,0.2)', borderRadius: '6px', color: '#00d2ff', cursor: 'pointer' }}>
                             Modifier
                           </button>
@@ -214,7 +222,19 @@ export function ResourcesAdmin() {
           initialValues={editItem ?? undefined}
           onSubmit={handleSave}
           onClose={() => { setShowForm(false); setEditItem(null) }}
-        />
+        >
+          <div>
+            <label style={{ fontSize: '12px', color: '#636e8a', display: 'block', marginBottom: '5px' }}>
+              Sprite (optionnel)
+            </label>
+            <SpriteDropdown
+              category="resource"
+              value={spriteId}
+              onChange={(id) => { setSpriteId(id); setSpriteChanged(true) }}
+              fallbackEmoji={editItem?.emoji}
+            />
+          </div>
+        </AdminFormModal>
       )}
     </div>
   )

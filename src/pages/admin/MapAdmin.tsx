@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { loadMapTiles, saveTile, clearTile, loadCreatures } from '../../lib/mapAdminService'
+import { assignSprite } from '../../lib/assetService'
 import { fetchAll } from '../../lib/adminService'
 import { useToast } from '../../components/shared/ToastManager'
 import { MAP_SIZE, MAP_CENTER } from '../../types/map'
@@ -58,10 +59,13 @@ export function MapAdmin() {
     }
   }
 
-  async function handleSaveTile(tile: TileStatic) {
+  async function handleSaveTile(tile: TileStatic, spriteId: string | null) {
     setSaving(true)
     try {
       await saveTile(tile)
+      if (spriteId !== null) {
+        await assignSprite('game_map', tile.id, spriteId)
+      }
       setTiles((prev) => ({ ...prev, [tile.id]: tile }))
       setSelectedTile(tile)
       addToast(`✅ Tuile (${tile.x}, ${tile.y}) sauvegardée !`, 'success')

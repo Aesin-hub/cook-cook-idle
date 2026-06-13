@@ -213,6 +213,7 @@ Quand un prompt est exécuté :
 - [x] AUDIT Phase 3
 - [x] 021 — Craft Automatique (useCraftAutoStore + onglet Auto dans CraftPage)
 - [x] 022 — Cahier de Recettes (CookbookPage + RecipeBookCard/Detail + bouton dans ProfilePage)
+- [x] 023 — Assets Manager (Supabase Storage + game_assets + AssetsAdmin + SpriteDropdown)
 
 ### Pages disponibles
 - `HarvestPage` — onglet Récolte (camp + expéditions + offline modal)
@@ -262,7 +263,7 @@ src/components/
 - `eau` est dans la région `foret` (déplacée depuis `plaine` pour éviter le deadlock de progression)
 
 ### Prochaine étape
-**Prompt 023 — Assets Manager (Supabase Storage + game_assets + AssetsAdmin + SpriteDropdown)**
+**Prompt 024 — Phaser de base (EventBus + PhaserGame + 3 scènes + PhaserCanvas in App.tsx)**
 
 ---
 

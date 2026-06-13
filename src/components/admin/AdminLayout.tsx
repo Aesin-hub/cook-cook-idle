@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react'
 import { useAuthStore } from '../../stores/useAuthStore'
 
 type AdminSection =
+  | 'assets'
   | 'regions'
   | 'resources'
   | 'craft-recipes'
@@ -11,7 +12,8 @@ type AdminSection =
   | 'map'
 
 const SECTIONS: { id: AdminSection; label: string; emoji: string }[] = [
-  { id: 'regions',       label: 'Régions',         emoji: '🗺️' },
+  { id: 'assets',        label: 'Assets',           emoji: '🖼️' },
+  { id: 'regions',       label: 'Régions',          emoji: '🗺️' },
   { id: 'resources',     label: 'Ressources',       emoji: '🌿' },
   { id: 'craft-recipes', label: 'Recettes Craft',   emoji: '⚗️' },
   { id: 'cook-recipes',  label: 'Recettes Cook',    emoji: '🍳' },

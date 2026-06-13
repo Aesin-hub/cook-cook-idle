@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { AdminFormModal, type FormField } from '../../components/admin/AdminFormModal'
+import { SpriteDropdown } from '../../components/admin/SpriteDropdown'
+import { assignSprite } from '../../lib/assetService'
 import { useToast } from '../../components/shared/ToastManager'
 import { loadCreatures, saveCreature, deleteCreature } from '../../lib/mapAdminService'
 import type { Creature } from '../../types/creature'
@@ -70,6 +72,8 @@ export function CreaturesAdmin() {
   const [loading, setLoading] = useState(true)
   const [editItem, setEditItem] = useState<Creature | null>(null)
   const [showForm, setShowForm] = useState(false)
+  const [spriteId, setSpriteId] = useState<string | null>(null)
+  const [spriteChanged, setSpriteChanged] = useState(false)
   const [search, setSearch] = useState('')
   const [filterRarity, setFilterRarity] = useState('all')
   const addToast = useToast()
@@ -110,6 +114,10 @@ export function CreaturesAdmin() {
       }
     }
     await saveCreature(parsed as Creature)
+    if (spriteChanged) {
+      await assignSprite('game_creatures', parsed.id, spriteId)
+      setSpriteChanged(false)
+    }
     addToast(`✅ Créature "${parsed.name}" sauvegardée !`, 'success')
     await load()
   }
@@ -142,7 +150,7 @@ export function CreaturesAdmin() {
           </p>
         </div>
         <button
-          onClick={() => { setEditItem(null); setShowForm(true) }}
+          onClick={() => { setEditItem(null); setSpriteId(null); setSpriteChanged(false); setShowForm(true) }}
           style={{ padding: '9px 16px', background: 'rgba(0,210,255,0.15)', border: '1px solid rgba(0,210,255,0.4)', borderRadius: '8px', color: '#00d2ff', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}
         >+ Ajouter</button>
       </div>
@@ -219,7 +227,7 @@ export function CreaturesAdmin() {
                       </td>
                       <td style={{ padding: '10px 12px' }}>
                         <div style={{ display: 'flex', gap: '6px' }}>
-                          <button onClick={() => { setEditItem(c); setShowForm(true) }}
+                          <button onClick={() => { setEditItem(c); setSpriteId(null); setSpriteChanged(false); setShowForm(true) }}
                             style={{ padding: '4px 10px', fontSize: '11px', background: 'rgba(0,210,255,0.08)', border: '1px solid rgba(0,210,255,0.2)', borderRadius: '6px', color: '#00d2ff', cursor: 'pointer' }}>
                             Modifier
                           </button>
@@ -245,7 +253,19 @@ export function CreaturesAdmin() {
           initialValues={editItem ? creatureToFormValues(editItem) : undefined}
           onSubmit={handleSave}
           onClose={() => { setShowForm(false); setEditItem(null) }}
-        />
+        >
+          <div>
+            <label style={{ fontSize: '12px', color: '#636e8a', display: 'block', marginBottom: '5px' }}>
+              Sprite (optionnel)
+            </label>
+            <SpriteDropdown
+              category="creature"
+              value={spriteId}
+              onChange={(id) => { setSpriteId(id); setSpriteChanged(true) }}
+              fallbackEmoji={editItem?.emoji}
+            />
+          </div>
+        </AdminFormModal>
       )}
     </div>
   )

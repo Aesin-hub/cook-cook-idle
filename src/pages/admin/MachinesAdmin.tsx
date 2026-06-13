@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { fetchAll, upsertEntry, deleteEntry } from '../../lib/adminService'
 import { DataTable } from '../../components/admin/DataTable'
 import { AdminFormModal, type FormField } from '../../components/admin/AdminFormModal'
+import { SpriteDropdown } from '../../components/admin/SpriteDropdown'
+import { assignSprite } from '../../lib/assetService'
 import { useToast } from '../../components/shared/ToastManager'
 import type { Machine } from '../../types/cook'
 
@@ -52,6 +54,8 @@ export function MachinesAdmin() {
   const [loading, setLoading] = useState(true)
   const [editItem, setEditItem] = useState<Machine | null>(null)
   const [showForm, setShowForm] = useState(false)
+  const [spriteId, setSpriteId] = useState<string | null>(null)
+  const [spriteChanged, setSpriteChanged] = useState(false)
   const addToast = useToast()
 
   async function load() {
@@ -72,6 +76,10 @@ export function MachinesAdmin() {
     try {
       const machine = fromFormValues(values)
       await upsertEntry('game_machines', machine.id, machine)
+      if (spriteChanged) {
+        await assignSprite('game_machines', machine.id, spriteId)
+        setSpriteChanged(false)
+      }
       addToast(`✅ Machine "${machine.name}" sauvegardée !`, 'success')
       await load()
     } catch (err: any) {
@@ -98,7 +106,7 @@ export function MachinesAdmin() {
           <p style={{ fontSize: '12px', color: '#636e8a', margin: '4px 0 0' }}>{machines.length} machine{machines.length > 1 ? 's' : ''}</p>
         </div>
         <button
-          onClick={() => { setEditItem(null); setShowForm(true) }}
+          onClick={() => { setEditItem(null); setSpriteId(null); setSpriteChanged(false); setShowForm(true) }}
           style={{ padding: '9px 16px', background: 'rgba(255,213,0,0.12)', border: '1px solid rgba(255,213,0,0.35)', borderRadius: '8px', color: '#ffd500', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}
         >+ Ajouter</button>
       </div>
@@ -114,7 +122,7 @@ export function MachinesAdmin() {
             { key: 'efficiencyBonus', label: 'Eff.', width: '60px', render: (m) => m.efficiencyBonus > 0 ? `+${(m.efficiencyBonus * 100).toFixed(0)}%` : '—' },
             { key: 'unlockXp', label: 'XP req.', width: '75px' },
           ]}
-          onEdit={(item) => { setEditItem(item); setShowForm(true) }}
+          onEdit={(item) => { setEditItem(item); setSpriteId(null); setSpriteChanged(false); setShowForm(true) }}
           onDelete={handleDelete}
         />
       </div>
@@ -125,7 +133,19 @@ export function MachinesAdmin() {
           initialValues={editItem ? toFormValues(editItem) : undefined}
           onSubmit={handleSave}
           onClose={() => { setShowForm(false); setEditItem(null) }}
-        />
+        >
+          <div>
+            <label style={{ fontSize: '12px', color: '#636e8a', display: 'block', marginBottom: '5px' }}>
+              Sprite (optionnel)
+            </label>
+            <SpriteDropdown
+              category="machine"
+              value={spriteId}
+              onChange={(id) => { setSpriteId(id); setSpriteChanged(true) }}
+              fallbackEmoji={editItem?.emoji}
+            />
+          </div>
+        </AdminFormModal>
       )}
     </div>
   )

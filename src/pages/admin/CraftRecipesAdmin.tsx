@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { fetchAll, upsertEntry, deleteEntry } from '../../lib/adminService'
 import { DataTable } from '../../components/admin/DataTable'
 import { AdminFormModal, type FormField } from '../../components/admin/AdminFormModal'
+import { SpriteDropdown } from '../../components/admin/SpriteDropdown'
+import { assignSprite } from '../../lib/assetService'
 import { useToast } from '../../components/shared/ToastManager'
 import type { CraftRecipe } from '../../types/game'
 
@@ -48,6 +50,8 @@ export function CraftRecipesAdmin() {
   const [loading, setLoading] = useState(true)
   const [editItem, setEditItem] = useState<CraftRecipe | null>(null)
   const [showForm, setShowForm] = useState(false)
+  const [spriteId, setSpriteId] = useState<string | null>(null)
+  const [spriteChanged, setSpriteChanged] = useState(false)
   const addToast = useToast()
 
   async function load() {
@@ -68,6 +72,10 @@ export function CraftRecipesAdmin() {
     try {
       const recipe = fromFormValues(values)
       await upsertEntry('game_craft_recipes', recipe.id, recipe)
+      if (spriteChanged) {
+        await assignSprite('game_craft_recipes', recipe.id, spriteId)
+        setSpriteChanged(false)
+      }
       addToast(`✅ Recette "${recipe.name}" sauvegardée !`, 'success')
       await load()
     } catch (err: any) {
@@ -94,7 +102,7 @@ export function CraftRecipesAdmin() {
           <p style={{ fontSize: '12px', color: '#636e8a', margin: '4px 0 0' }}>{recipes.length} recette{recipes.length > 1 ? 's' : ''}</p>
         </div>
         <button
-          onClick={() => { setEditItem(null); setShowForm(true) }}
+          onClick={() => { setEditItem(null); setSpriteId(null); setSpriteChanged(false); setShowForm(true) }}
           style={{ padding: '9px 16px', background: 'rgba(191,90,242,0.15)', border: '1px solid rgba(191,90,242,0.4)', borderRadius: '8px', color: '#bf5af2', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}
         >+ Ajouter</button>
       </div>
@@ -109,7 +117,7 @@ export function CraftRecipesAdmin() {
             { key: 'xpReward', label: 'XP', width: '60px' },
             { key: 'firstTimeFast', label: '3s', width: '50px', render: (r) => r.firstTimeFast ? '⚡' : '—' },
           ]}
-          onEdit={(item) => { setEditItem(item); setShowForm(true) }}
+          onEdit={(item) => { setEditItem(item); setSpriteId(null); setSpriteChanged(false); setShowForm(true) }}
           onDelete={handleDelete}
         />
       </div>
@@ -120,7 +128,19 @@ export function CraftRecipesAdmin() {
           initialValues={editItem ? toFormValues(editItem) : undefined}
           onSubmit={handleSave}
           onClose={() => { setShowForm(false); setEditItem(null) }}
-        />
+        >
+          <div>
+            <label style={{ fontSize: '12px', color: '#636e8a', display: 'block', marginBottom: '5px' }}>
+              Sprite (optionnel)
+            </label>
+            <SpriteDropdown
+              category="resource"
+              value={spriteId}
+              onChange={(id) => { setSpriteId(id); setSpriteChanged(true) }}
+              fallbackEmoji={editItem?.emoji}
+            />
+          </div>
+        </AdminFormModal>
       )}
     </div>
   )

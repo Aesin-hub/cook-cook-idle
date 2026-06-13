@@ -17,10 +17,11 @@ interface AdminFormModalProps {
   initialValues?: Record<string, any>
   onSubmit: (values: Record<string, any>) => Promise<void>
   onClose: () => void
+  children?: React.ReactNode
 }
 
 export function AdminFormModal({
-  title, fields, initialValues, onSubmit, onClose,
+  title, fields, initialValues, onSubmit, onClose, children,
 }: AdminFormModalProps) {
   const [values, setValues] = useState<Record<string, any>>(initialValues ?? {})
   const [loading, setLoading] = useState(false)
@@ -148,6 +149,12 @@ export function AdminFormModal({
             </div>
           ))}
         </div>
+
+        {children && (
+          <div style={{ marginBottom: '14px' }}>
+            {children}
+          </div>
+        )}
 
         {error && (
           <div style={{

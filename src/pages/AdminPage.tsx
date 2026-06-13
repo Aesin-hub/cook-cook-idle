@@ -7,6 +7,7 @@ import { CookRecipesAdmin } from './admin/CookRecipesAdmin'
 import { MachinesAdmin } from './admin/MachinesAdmin'
 import { CreaturesAdmin } from './admin/CreaturesAdmin'
 import { MapAdmin } from './admin/MapAdmin'
+import { AssetsAdmin } from './admin/AssetsAdmin'
 import { AuthPage } from './AuthPage'
 
 const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL as string | undefined
@@ -50,6 +51,7 @@ export function AdminPage() {
     <AdminLayout>
       {(section) => {
         switch (section) {
+          case 'assets':        return <AssetsAdmin />
           case 'regions':       return <RegionsAdmin />
           case 'resources':     return <ResourcesAdmin />
           case 'craft-recipes': return <CraftRecipesAdmin />
