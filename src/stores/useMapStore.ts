@@ -421,7 +421,12 @@ export const useMapStore = create<MapState & MapActions>()(
     {
       name: 'cooking-fantasy-map',
       partialize: (state) => ({
-        playerTiles: state.playerTiles,
+        // Ne persister que les tuiles non-hidden : état par défaut reconstruit par loadTiles()
+        playerTiles: Object.fromEntries(
+          Object.entries(state.playerTiles).filter(
+            ([, v]) => v.discoveryState !== 'hidden' || v.familiarCaptured
+          )
+        ),
         campCoord: state.campCoord,
         campTravel: state.campTravel,
       }),

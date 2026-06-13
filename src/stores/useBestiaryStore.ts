@@ -164,7 +164,7 @@ export const useBestiaryStore = create<BestiaryState & BestiaryActions>()(
               : message,
           }
         } else {
-          const xpGained = creature.xpOnFailure
+          const xpGained = creature.xpOnFailure ?? Math.floor(creature.xpOnSuccess * 0.2)
           usePlayerStore.getState().addXp('hunt', xpGained)
 
           const msgs = creature.failMessages
