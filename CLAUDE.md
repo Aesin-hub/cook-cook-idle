@@ -211,12 +211,15 @@ Quand un prompt est exécuté :
 - [x] 019 — UI Carte (grille 31×31, pan/zoom, bottom sheet)
 - [x] 020 — UI Classes & Profil (ProfilePage + ClassCard + FamiliarCollection)
 - [x] AUDIT Phase 3
+- [x] 021 — Craft Automatique (useCraftAutoStore + onglet Auto dans CraftPage)
+- [x] 022 — Cahier de Recettes (CookbookPage + RecipeBookCard/Detail + bouton dans ProfilePage)
 
 ### Pages disponibles
 - `HarvestPage` — onglet Récolte (camp + expéditions + offline modal)
 - `CraftPage` — onglet Craft (recettes + file + XP)
 - `CookPage` — onglet Cook (fourneaux + machines + lignes de production)
-- `ProfilePage` — onglet Profil ⭐ (classes + familiers + debug panel)
+- `ProfilePage` — onglet Profil ⭐ (classes + familiers + debug panel + bouton Cahier de Recettes)
+- `CookbookPage` — Cahier de Recettes (vraies recettes, filtres catégorie/cuisine, bottom sheet détail)
 - `MapPage` — onglet Carte 🗺️ (grille 31×31, pan/zoom, bottom sheet, boss indicators)
 - `AdminPage` — route `/admin` (CRUD régions / ressources / recettes / machines / créatures / carte)
 
@@ -259,7 +262,7 @@ src/components/
 - `eau` est dans la région `foret` (déplacée depuis `plaine` pour éviter le deadlock de progression)
 
 ### Prochaine étape
-**Prompt 021 — Craft Automatique (useCraftAutoStore + onglet Auto dans CraftPage)**
+**Prompt 023 — Assets Manager (Supabase Storage + game_assets + AssetsAdmin + SpriteDropdown)**
 
 ---
 

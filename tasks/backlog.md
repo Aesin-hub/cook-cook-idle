@@ -41,8 +41,7 @@
 - 021 — Craft Automatique (useCraftAutoStore + onglet Auto dans CraftPage) ✅ (2026-06-13)
 
 ### Post-Phase 3
-- 021 — Craft Automatique (seuils de stock + chaînes Cook)
-- 022 — Cahier de Recettes (vraies recettes depuis le Profil)
+- 022 — Cahier de Recettes (vraies recettes depuis le Profil) ✅ (2026-06-13)
 
 ### Phase 4 — Social & Méta
 - Commerce avec villages, cartes à collectionner, monétisation cosmétique
