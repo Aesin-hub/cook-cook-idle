@@ -8,7 +8,7 @@ const TABS: Tab[] = [
   { id: 'harvest',   label: 'Récolte',  emoji: '⛺' },
   { id: 'craft',     label: 'Craft',    emoji: '⚗️' },
   { id: 'cook',      label: 'Cook',     emoji: '🍳' },
-  { id: 'inventory', label: 'Sac',      emoji: '🎒' },
+  { id: 'inventory', label: 'Profil',   emoji: '⭐' },
   { id: 'map',       label: 'Carte',    emoji: '🗺️' },
 ]
 

@@ -11,9 +11,9 @@ import { OfflineModal } from './components/shared/OfflineModal'
 import { AppShell } from './components/layout/AppShell'
 import { HarvestPage } from './pages/HarvestPage'
 import { CraftPage } from './pages/CraftPage'
-import { InventoryPage } from './pages/InventoryPage'
 import { CookPage } from './pages/CookPage'
 import { MapPage } from './pages/MapPage'
+import { ProfilePage } from './pages/ProfilePage'
 import { AuthPage } from './pages/AuthPage'
 import { AdminPage } from './pages/AdminPage'
 import type { CraftResult } from './types/craft'
@@ -68,7 +68,7 @@ function GameApp() {
       case 'harvest':   return <HarvestPage />
       case 'craft':     return <CraftPage />
       case 'cook':      return <CookPage />
-      case 'inventory': return <InventoryPage />
+      case 'inventory': return <ProfilePage />
       case 'map':       return <MapPage />
     }
   }

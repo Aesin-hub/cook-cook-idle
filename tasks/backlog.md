@@ -27,18 +27,16 @@
 - 014 — usePlayerStore (XP global + 6 classes × 10 niveaux) ✅ (2026-06-11)
 - 015 — Données carte 31×31 + créatures + admin carte ✅ (2026-06-11)
 
-## 🔄 En cours
-- 016 — useMapStore (brouillard de guerre + déplacement + quotas)
+### Phase 3 (suite)
+- 016 — useMapStore (brouillard de guerre + déplacement + quotas) ✅ (2026-06-11)
+- 017 — Extension usePlayerStore (classModifiers, activeEvents, prestigeLevel) ✅ (2026-06-11)
+- 018 — useBestiaryStore + Edge Function boss spawns ✅ (2026-06-11)
+- 019 — UI Carte (grille 31×31, pan/zoom, bottom sheet) ✅ (2026-06-11)
+- 020 — UI Classes & Profil (ProfilePage + ClassCard + FamiliarCollection) ✅ (2026-06-13)
 
 ## 📋 À faire
 
 ### Phase 3 (suite)
-- 015 — Données carte 31×31 + créatures + admin carte
-- 016 — useMapStore (brouillard de guerre + déplacement + quotas)
-- 017 — Extension usePlayerStore (classModifiers, activeEvents, prestigeLevel)
-- 018 — useBestiaryStore + Edge Function boss spawns
-- 019 — UI Carte (grille joueur 31×31, pan/zoom, bottom sheet)
-- 020 — UI Classes & Profil (ProfilePage + ClassCard + FamiliarCollection)
 - AUDIT Phase 3
 
 ### Post-Phase 3

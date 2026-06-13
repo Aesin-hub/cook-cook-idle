@@ -1,12 +1,12 @@
 # Sprint actif — Cooking Fantasy
 
 ## 🔄 Prompt en cours
-**016 — useMapStore (brouillard de guerre + déplacement + quotas)**
+**AUDIT Phase 3**
 
 ## ✅ Derniers prompts exécutés
-- 015 — Données carte 31×31 + créatures + admin carte ✅ (2026-06-11)
-- 014 — usePlayerStore (XP global + 6 classes × 10 niveaux) ✅ (2026-06-11)
-- 013-bis — Migration stores Phase 2 → Phase 3 ✅ (2026-06-11)
+- 020 — UI Classes & Profil (ProfilePage + ClassCard + FamiliarCollection) ✅ (2026-06-13)
+- 019 — UI Carte (grille 31×31, pan/zoom, bottom sheet) ✅ (2026-06-11)
+- 018 — useBestiaryStore + Edge Function boss spawns ✅ (2026-06-11)
 
 ## ➡️ Prochain prompt
-**017 — Extension usePlayerStore (classModifiers, activeEvents, prestigeLevel)**
+**021 — Craft Automatique**
