@@ -205,51 +205,101 @@ Quand un prompt est exécuté :
 - [x] 013-bis — Migration stores Phase 2 → Phase 3 (types carte, multiplicateurs)
 - [x] 014 — usePlayerStore (XP global + 6 classes × 10 niveaux)
 - [x] 015 — Données carte 31×31 + créatures + admin carte
+- [x] 016 — useMapStore (brouillard de guerre + déplacement + quotas)
+- [x] 017 — Extension usePlayerStore (classModifiers, activeEvents, prestigeLevel)
+- [x] 018 — useBestiaryStore + Edge Function boss-spawner
+- [x] 019 — UI Carte (grille 31×31, pan/zoom, bottom sheet)
+- [x] 020 — UI Classes & Profil (ProfilePage + ClassCard + FamiliarCollection)
+- [x] AUDIT Phase 3
 
 ### Pages disponibles
 - `HarvestPage` — onglet Récolte (camp + expéditions + offline modal)
 - `CraftPage` — onglet Craft (recettes + file + XP)
 - `CookPage` — onglet Cook (fourneaux + machines + lignes de production)
-- `InventoryPage` — onglet Sac (liste filtrée + tri + summary)
-- `AdminPage` — route `/admin` (CRUD régions / ressources / recettes / machines)
-- Carte — placeholder `<ComingSoon>`
+- `ProfilePage` — onglet Profil ⭐ (classes + familiers + debug panel)
+- `MapPage` — onglet Carte 🗺️ (grille 31×31, pan/zoom, bottom sheet, boss indicators)
+- `AdminPage` — route `/admin` (CRUD régions / ressources / recettes / machines / créatures / carte)
+
+### Stores disponibles
+- `useHarvestStore` — camp, expéditions, tick(), offline progress
+- `useInventoryStore` — resources: Record<string, number>
+- `useCraftStore` — file d'attente craft, XP artisan → usePlayerStore
+- `useCookStore` — fourneaux, machines, lignes production, XP cuisinier → usePlayerStore
+- `usePlayerStore` — totalXp, classLevels, classXp, classModifiers, activeEvents, prestigeLevel
+- `useMapStore` — playerTiles, campTravel, quotas journaliers, fog of war
+- `useBestiaryStore` — capturedCreatureIds, activeFamiliarId, huntHistory, boss spawns
+- `useGameDataStore` — données Supabase (regions, resources, recipes, machines, creatures, map)
+- `useAuthStore` — user Supabase
+
+### Composants Phase 3
+```
+src/components/
+├── map/
+│   ├── MapGrid.tsx          ← grille 31×31 avec pan/zoom (useCallback, memo)
+│   ├── MapTile.tsx          ← tuile individuelle (memo() pour perf)
+│   ├── TileInfoSheet.tsx    ← bottom sheet détail tuile
+│   ├── BossIndicator.tsx    ← indicateur boss actif (timer 60s)
+│   ├── CampTravelBar.tsx    ← barre de progression déplacement camp
+│   └── MapSearchBar.tsx     ← recherche de tuile par coordonnée
+└── profile/
+    ├── PlayerHeader.tsx     ← identité + XP total + familier actif
+    ├── ClassCard.tsx        ← card classe expandable (niveau + XP + bonus)
+    ├── FamiliarCollection.tsx ← grille familiers (capturés/silhouettes)
+    └── DebugPanel.tsx       ← sliders niveaux (DEV uniquement)
+```
 
 ### Supabase
-- 5 tables de sauvegarde : `player_saves`, `save_inventory`, `save_harvest`, `save_craft` + RLS
-- 6 tables de données de jeu : `game_regions`, `game_resources`, `game_craft_recipes`, `game_cook_recipes`, `game_machines`, `game_furnace_levels` + RLS
+- Tables de sauvegarde : `player_saves`, `save_inventory`, `save_harvest`, `save_craft`, `save_map`, `save_bestiary` + RLS
+- Tables de données de jeu : `game_regions`, `game_resources`, `game_craft_recipes`, `game_cook_recipes`, `game_machines`, `game_furnace_levels`, `game_creatures`, `game_map` + RLS
+- Table boss spawns : `game_boss_spawns` (lecture publique, écriture service_role)
+- Edge Function : `supabase/functions/boss-spawner/index.ts` (cron quotidien)
 - Auth email activée, `VITE_ADMIN_EMAIL=lewis.bock@gmail.com`
 
 ### Ressource eau
 - `eau` est dans la région `foret` (déplacée depuis `plaine` pour éviter le deadlock de progression)
 
 ### Prochaine étape
-**Prompt 016 — useMapStore (brouillard de guerre + déplacement + quotas)**
+**Prompt 021 — Craft Automatique (useCraftAutoStore + onglet Auto dans CraftPage)**
 
 ---
 
-## Phase 3 — Architecture (en cours)
+## Phase 3 — Architecture (complète)
 
 ### Carte 31×31
 - Centre : { x: 15, y: 15 }
 - Types dans `src/types/map.ts`
 - `TileCoord`, `TileRarity`, `TileDifficulty`, `TileBiome`, `TileCulture`
-- Fonctions utilitaires : `tileDistance()`, `travelTimeMs()`, `getAdjacentTiles()`,
+- Fonctions utilitaires : `tileDistance()`, `travelTimeMs()`, `getAdjacentTiles()` (4 cardinaux),
   `getTileCulture()`, `getTileRarity()`
+- `getAllAdjacentTiles()` existe mais N'EST JAMAIS utilisé pour le dévoilement (diagonales exclues)
+
+### Types Phase 3
+- `src/types/map.ts` — `TileCoord`, `HarvestMultipliers`, `DEFAULT_HARVEST_MULTIPLIERS`, `MAP_CENTER`, `MAP_SIZE`
+- `src/types/mapState.ts` — `TilePlayerState`, `CampTravel`, `TileVisibility`
+- `src/types/tile.ts` — `TileStatic`, `TileDynamic`, `TILE_RARITY_COLORS`
+- `src/types/creature.ts` — `Creature`, `CreatureDrop`, `HuntSuccessEntry`, `xpOnSuccess`, `xpOnFailure`
+- `src/types/bestiary.ts` — `HuntResult`, `ActiveBoss`, `BestiaryState`
+- `src/types/player.ts` — `ClassId`, `ClassModifier`, `ActiveEvent`
 
 ### Multiplicateurs de classes
 - `HarvestMultipliers` dans `src/types/map.ts`
 - `DEFAULT_HARVEST_MULTIPLIERS` : toutes les valeurs à 1.0 (neutre)
-- Passés à `useGameLoop()` comme 4ème paramètre via `usePlayerStore.getHarvestMultipliers()`
-- `usePlayerStore` : clé persist `cooking-fantasy-player`, 6 classes × 10 niveaux
-- `debugClass(classId, level)` disponible en console dev
+- Passés à `useGameLoop()` via `usePlayerStore.getHarvestMultipliers()`
+- Planchers : `Math.max(0.1, ...)` sur tous les multiplicateurs
 
 ### Classes (src/data/classes.json)
 - 6 classes : recolteur, artisan, cuisinier, explorateur, chasseur, erudit
 - 10 niveaux chacune, XP requis : 50/150/350/700/1200/2000/3000/4500/6500/9000
-- XP craft → classXp.artisan, XP cook → classXp.cuisinier
-- useCraftStore et useCookStore n'ont plus de totalXp/totalCookXp (délégué à usePlayerStore)
+- XP craft → classXp.artisan, XP cook → classXp.cuisinier, XP hunt → classXp.chasseur
+- `useCraftStore` et `useCookStore` délèguent tout XP à `usePlayerStore.addXp()`
+- `classModifiers`, `activeEvents`, `prestigeLevel` persistés dans `usePlayerStore`
+
+### Règles carte importantes
+- Fog of war : 4 états (`hidden` → `revealed` → `explored` → `discovered`)
+- Déplacement camp : `removeCamp()` avant `isInTransit: true` → aucune production pendant le trajet
+- Quotas : reset à minuit (`getMidnightToday()`) — pas de 24h glissantes
+- Explorateur niv 1 : révèle la rareté des tuiles cardinales adjacentes sans les explorer
 
 ### Rétrocompatibilité
 - `Camp.tileCoord` et `Expedition.tileCoord` sont optionnels
 - `RegionId` existant continue de fonctionner
-- Les stores Phase 1-2 ne sont pas modifiés en profondeur
