@@ -6,6 +6,7 @@ import { useCookStore } from '../stores/useCookStore'
 import { useMapStore } from '../stores/useMapStore'
 import { useBestiaryStore } from '../stores/useBestiaryStore'
 import { usePlayerStore } from '../stores/usePlayerStore'
+import { useCraftAutoStore } from '../stores/useCraftAutoStore'
 import { DEFAULT_HARVEST_MULTIPLIERS } from '../types/map'
 import type { HarvestMultipliers } from '../types/map'
 import type { ProductionResult } from '../types/cook'
@@ -53,6 +54,9 @@ export function useGameLoop(
           onFurnaceUnlocked?.(unlockMessage)
         }
       }
+
+      // 2bis. Auto-craft
+      useCraftAutoStore.getState().processTick()
 
       // 3. Cook
       const cookResults = cookTick()

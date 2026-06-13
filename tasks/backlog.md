@@ -37,7 +37,8 @@
 ## 📋 À faire
 
 ### Phase 3 (suite)
-- AUDIT Phase 3
+- AUDIT Phase 3 ✅ (2026-06-13)
+- 021 — Craft Automatique (useCraftAutoStore + onglet Auto dans CraftPage) ✅ (2026-06-13)
 
 ### Post-Phase 3
 - 021 — Craft Automatique (seuils de stock + chaînes Cook)
